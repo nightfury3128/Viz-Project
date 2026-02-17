@@ -26,5 +26,5 @@ merged = pd.merge(
 
 merged.to_csv("countries_health_wealth_clean.csv", index=False)
 
-print("Done! Clean dataset saved.")
+print("Clean dataset saved.")
 print(merged.head())
