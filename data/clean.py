@@ -1,30 +1,43 @@
 import pandas as pd
 
 
-gdp = pd.read_csv("data/gdp-per-capita-worldbank.csv")
-life = pd.read_csv("data/life-expectancy.csv")
-
+gdp = pd.read_csv("gdp-per-capita-worldbank.csv")
+life = pd.read_csv("life-expectancy.csv")
 
 gdp = gdp[["Entity", "Code", "Year", "GDP per capita"]]
 life = life[["Entity", "Code", "Year", "Life expectancy"]]
 
+gdp = gdp.rename(columns={
+    "Entity": "country",
+    "Code": "code",
+    "Year": "year",
+    "GDP per capita": "gdp"
+})
 
-gdp.columns = ["country", "code", "year", "gdp"]
-life.columns = ["country", "code", "year", "life_expectancy"]
-
+life = life.rename(columns={
+    "Entity": "country",
+    "Code": "code",
+    "Year": "year",
+    "Life expectancy": "life_expectancy"
+})
 
 gdp = gdp[gdp["code"].notna()]
 life = life[life["code"].notna()]
 
+print("GDP columns:", gdp.columns)
+print("Life columns:", life.columns)
 
 merged = pd.merge(
     gdp,
-    life[["code", "life_expectancy"]],
-    on="code",
+    life,
+    on=["code", "year"],
     how="inner"
 )
 
-merged.to_csv("countries_health_wealth_clean.csv", index=False)
+merged = merged.dropna()
 
-print("Clean dataset saved.")
-print(merged.head())
+print("Rows after merge:", len(merged))
+print("Unique years:", merged["year"].unique())
+
+# Save
+merged.to_csv("countries_health_wealth_clean.csv", index=False)

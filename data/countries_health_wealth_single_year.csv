@@ -1,0 +1,199 @@
+country_x,code,year,gdp,country_y,life_expectancy
+Afghanistan,AFG,2023,1983.8126,Afghanistan,66.0346
+Albania,ALB,2023,19487.71,Albania,79.6019
+Algeria,DZA,2023,15159.324,Algeria,76.261
+Andorra,AND,2023,64631.297,Andorra,84.0406
+Angola,AGO,2023,8788.261,Angola,64.617
+Antigua and Barbuda,ATG,2023,28474.045,Antigua and Barbuda,77.5976
+Argentina,ARG,2023,27230.396,Argentina,77.3947
+Armenia,ARM,2023,19402.752,Armenia,75.6827
+Aruba,ABW,2023,41964.77,Aruba,76.353
+Australia,AUS,2023,60684.96,Australia,83.9228
+Austria,AUT,2023,64536.297,Austria,81.9559
+Azerbaijan,AZE,2023,21310.738,Azerbaijan,74.4286
+Bahamas,BHS,2023,35221.27,Bahamas,74.5518
+Bahrain,BHR,2023,57819.906,Bahrain,81.2835
+Bangladesh,BGD,2023,8242.398,Bangladesh,74.6723
+Barbados,BRB,2023,21318.672,Barbados,76.1782
+Belarus,BLR,2023,27782.438,Belarus,74.4339
+Belgium,BEL,2023,63095.402,Belgium,82.115
+Belize,BLZ,2023,12371.009,Belize,73.5656
+Benin,BEN,2023,3721.2126,Benin,60.7738
+Bermuda,BMU,2023,103052.35,Bermuda,82.3089
+Bhutan,BTN,2023,14610.296,Bhutan,72.9753
+Bolivia,BOL,2023,11616.157,Bolivia,68.5814
+Bosnia and Herzegovina,BIH,2023,18844.465,Bosnia and Herzegovina,77.8504
+Botswana,BWA,2023,18932.48,Botswana,69.1631
+Brazil,BRA,2023,19079.812,Brazil,75.8482
+Brunei,BRN,2023,76616.7,Brunei,75.3266
+Bulgaria,BGR,2023,31469.861,Bulgaria,75.6363
+Burkina Faso,BFA,2023,2486.2068,Burkina Faso,61.092
+Burundi,BDI,2023,1036.1671,Burundi,63.6511
+Cambodia,KHM,2023,6695.292,Cambodia,70.6675
+Cameroon,CMR,2023,4875.251,Cameroon,63.6996
+Canada,CAN,2023,57517.44,Canada,82.6302
+Cape Verde,CPV,2023,9228.461,Cape Verde,76.0587
+Cayman Islands,CYM,2023,79675.86,Cayman Islands,80.3576
+Central African Republic,CAF,2023,1132.6764,Central African Republic,57.4077
+Chad,TCD,2023,2433.0989,Chad,55.0692
+Chile,CHL,2023,29563.678,Chile,81.1667
+China,CHN,2023,22687.076,China,77.9529
+Colombia,COL,2023,18382.998,Colombia,77.7246
+Comoros,COM,2023,3434.4019,Comoros,66.7768
+Congo,COG,2023,6172.2876,Congo,65.772
+Costa Rica,CRI,2023,25979.629,Costa Rica,80.7995
+Cote d'Ivoire,CIV,2023,6520.899,Cote d'Ivoire,61.9438
+Croatia,HRV,2023,39316.152,Croatia,78.5803
+Curacao,CUW,2023,27617.92,Curacao,76.7996
+Cyprus,CYP,2023,48958.18,Cyprus,81.648
+Czechia,CZE,2023,47558.41,Czechia,79.8341
+Democratic Republic of Congo,COD,2023,1559.338,Democratic Republic of Congo,61.895
+Denmark,DNK,2023,69379.22,Denmark,81.9328
+Djibouti,DJI,2023,6510.6787,Djibouti,65.9865
+Dominica,DMA,2023,18278.225,Dominica,71.1325
+Dominican Republic,DOM,2023,23282.49,Dominican Republic,73.7201
+East Timor,TLS,2023,4331.078,East Timor,67.6894
+Ecuador,ECU,2023,14343.019,Ecuador,77.3924
+Egypt,EGY,2023,16691.387,Egypt,71.6335
+El Salvador,SLV,2023,11424.6455,El Salvador,72.0993
+Equatorial Guinea,GNQ,2023,15688.238,Equatorial Guinea,63.7071
+Estonia,EST,2023,41288.617,Estonia,79.1535
+Eswatini,SWZ,2023,10181.504,Eswatini,64.1227
+Ethiopia,ETH,2023,2757.9592,Ethiopia,67.315
+Faroe Islands,FRO,2023,71807.31,Faroe Islands,80.1792
+Fiji,FJI,2023,13194.805,Fiji,67.3157
+Finland,FIN,2023,56250.88,Finland,81.9102
+France,FRA,2023,54296.723,France,83.3253
+Gabon,GAB,2023,18701.422,Gabon,68.3367
+Gambia,GMB,2023,2963.5986,Gambia,65.8603
+Georgia,GEO,2023,22590.53,Georgia,74.4965
+Germany,DEU,2023,63039.37,Germany,81.3777
+Ghana,GHA,2023,6808.5376,Ghana,65.4979
+Greece,GRC,2023,36700.51,Greece,81.8568
+Greenland,GRL,2023,71037.54,Greenland,70.055
+Grenada,GRD,2023,17093.156,Grenada,75.2052
+Guatemala,GTM,2023,12384.948,Guatemala,72.6023
+Guinea,GIN,2023,3904.824,Guinea,60.7405
+Guinea-Bissau,GNB,2023,2693.7766,Guinea-Bissau,64.0849
+Guyana,GUY,2023,49312.36,Guyana,70.1802
+Haiti,HTI,2023,2965.9463,Haiti,64.9356
+Honduras,HND,2023,6467.88,Honduras,72.8842
+Hong Kong,HKG,2023,64434.56,Hong Kong,85.5106
+Hungary,HUN,2023,40333.254,Hungary,77.024
+Iceland,ISL,2023,68118.4,Iceland,82.6911
+India,IND,2023,9301.756,India,72.0026
+Indonesia,IDN,2023,13889.975,Indonesia,71.1457
+Iran,IRN,2023,17044.816,Iran,77.6545
+Iraq,IRQ,2023,13202.323,Iraq,72.3242
+Ireland,IRL,2023,117862.125,Ireland,82.4118
+Israel,ISR,2023,47527.152,Israel,82.408
+Italy,ITA,2023,52870.324,Italy,83.7157
+Jamaica,JAM,2023,11398.8125,Jamaica,71.4789
+Japan,JPN,2023,45858.66,Japan,84.7123
+Jordan,JOR,2023,9381.3545,Jordan,77.8145
+Kazakhstan,KAZ,2023,34703.234,Kazakhstan,74.4021
+Kenya,KEN,2023,5691.825,Kenya,63.6459
+Kiribati,KIR,2023,3140.5833,Kiribati,66.4731
+Kosovo,OWID_KOS,2023,14240.203,Kosovo,78.0326
+Kuwait,KWT,2023,47777.402,Kuwait,80.4047
+Kyrgyzstan,KGZ,2023,6575.7754,Kyrgyzstan,71.677
+Laos,LAO,2023,8372.156,Laos,68.9637
+Latvia,LVA,2023,37277.723,Latvia,76.1898
+Lebanon,LBN,2023,11330.269,Lebanon,77.817
+Lesotho,LSO,2023,2595.8296,Lesotho,57.3749
+Liberia,LBR,2023,1616.9237,Liberia,62.1625
+Libya,LBY,2023,12476.598,Libya,69.3389
+Lithuania,LTU,2023,46159.707,Lithuania,76.025
+Luxembourg,LUX,2023,130048.92,Luxembourg,82.2294
+Macao,MAC,2023,104815.2,Macao,83.0749
+Madagascar,MDG,2023,1629.4609,Madagascar,63.6317
+Malawi,MWI,2023,1649.2987,Malawi,67.3535
+Malaysia,MYS,2023,32857.668,Malaysia,76.6571
+Maldives,MDV,2023,22333.047,Maldives,81.0412
+Mali,MLI,2023,2860.4282,Mali,60.4394
+Malta,MLT,2023,57488.105,Malta,83.2989
+Marshall Islands,MHL,2023,6801.6147,Marshall Islands,66.9454
+Mauritania,MRT,2023,6276.475,Mauritania,68.4836
+Mauritius,MUS,2023,26635.012,Mauritius,74.9263
+Mexico,MEX,2023,21917.248,Mexico,75.069
+Micronesia (country),FSM,2023,3814.7202,Micronesia (country),67.1983
+Moldova,MDA,2023,15990.4795,Moldova,71.1985
+Mongolia,MNG,2023,16222.864,Mongolia,71.7341
+Montenegro,MNE,2023,25922.184,Montenegro,77.0869
+Morocco,MAR,2023,8915.352,Morocco,75.3128
+Mozambique,MOZ,2023,1512.2764,Mozambique,63.6111
+Myanmar,MMR,2023,5364.138,Myanmar,66.889
+Namibia,NAM,2023,10137.673,Namibia,67.3848
+Nauru,NRU,2023,12372.5205,Nauru,62.1094
+Nepal,NPL,2023,4861.2305,Nepal,70.3537
+Netherlands,NLD,2023,70198.93,Netherlands,82.1576
+New Zealand,NZL,2023,49508.27,New Zealand,82.088
+Nicaragua,NIC,2023,7496.5293,Nicaragua,74.9468
+Niger,NER,2023,1689.5642,Niger,61.1833
+Nigeria,NGA,2023,7843.8345,Nigeria,54.4623
+North Macedonia,MKD,2023,22317.725,North Macedonia,77.3947
+Norway,NOR,2023,90085.44,Norway,83.3078
+Oman,OMN,2023,37793.617,Oman,80.0305
+Pakistan,PAK,2023,5418.7695,Pakistan,67.649
+Palau,PLW,2023,16425.973,Palau,69.269
+Palestine,PSE,2023,5361.131,Palestine,65.1703
+Panama,PAN,2023,35872.95,Panama,79.5937
+Papua New Guinea,PNG,2023,4205.8477,Papua New Guinea,66.134
+Paraguay,PRY,2023,15826.088,Paraguay,73.8443
+Peru,PER,2023,15327.582,Peru,77.7401
+Philippines,PHL,2023,9898.533,Philippines,69.8327
+Poland,POL,2023,43672.766,Poland,78.6329
+Portugal,PRT,2023,41768.254,Portugal,82.3599
+Puerto Rico,PRI,2023,42837.9,Puerto Rico,81.6902
+Qatar,QAT,2023,116563.99,Qatar,82.368
+Romania,ROU,2023,38171.207,Romania,75.9381
+Russia,RUS,2023,39887.34,Russia,73.1541
+Rwanda,RWA,2023,3062.999,Rwanda,67.7852
+Saint Kitts and Nevis,KNA,2023,30616.578,Saint Kitts and Nevis,72.1447
+Saint Lucia,LCA,2023,23403.744,Saint Lucia,72.6968
+Saint Vincent and the Grenadines,VCT,2023,17858.244,Saint Vincent and the Grenadines,71.2301
+Samoa,WSM,2023,7383.7456,Samoa,71.6982
+San Marino,SMR,2023,70951.79,San Marino,85.7062
+Sao Tome and Principe,STP,2023,5541.302,Sao Tome and Principe,69.7182
+Saudi Arabia,SAU,2023,64481.844,Saudi Arabia,78.7321
+Senegal,SEN,2023,4304.7617,Senegal,68.6829
+Serbia,SRB,2023,24487.047,Serbia,76.7693
+Seychelles,SYC,2023,28635.355,Seychelles,72.862
+Sierra Leone,SLE,2023,3034.946,Sierra Leone,61.7858
+Singapore,SGP,2023,129555.24,Singapore,83.7362
+Sint Maarten (Dutch part),SXM,2023,46571.09,Sint Maarten (Dutch part),76.371
+Slovakia,SVK,2023,39518.223,Slovakia,78.3414
+Slovenia,SVN,2023,47977.426,Slovenia,81.6034
+Solomon Islands,SLB,2023,2339.575,Solomon Islands,70.5277
+Somalia,SOM,2023,1401.6473,Somalia,58.8158
+South Africa,ZAF,2023,13695.376,South Africa,66.1387
+South Korea,KOR,2023,54029.344,South Korea,84.3288
+Spain,ESP,2023,47322.594,Spain,83.6703
+Sri Lanka,LKA,2023,13024.94,Sri Lanka,77.4828
+Sudan,SDN,2023,2181.079,Sudan,66.331
+Suriname,SUR,2023,19020.867,Suriname,73.631
+Sweden,SWE,2023,62662.766,Sweden,83.2624
+Switzerland,CHE,2023,82295.3,Switzerland,83.9536
+Tajikistan,TJK,2023,4472.324,Tajikistan,71.7901
+Tanzania,TZA,2023,3620.7935,Tanzania,66.9953
+Thailand,THA,2023,21191.453,Thailand,76.4115
+Togo,TGO,2023,2842.2307,Togo,62.7387
+Tonga,TON,2023,7030.419,Tonga,72.8947
+Trinidad and Tobago,TTO,2023,31196.604,Trinidad and Tobago,73.4896
+Tunisia,TUN,2023,12650.962,Tunisia,76.5077
+Turkey,TUR,2023,35069.17,Turkey,77.1557
+Turkmenistan,TKM,2023,17866.404,Turkmenistan,70.0727
+Turks and Caicos Islands,TCA,2023,31839.371,Turks and Caicos Islands,78.0077
+Tuvalu,TUV,2023,5812.3994,Tuvalu,67.1049
+Uganda,UGA,2023,2791.0557,Uganda,68.2523
+Ukraine,UKR,2023,15916.958,Ukraine,73.4225
+United Arab Emirates,ARE,2023,70239.85,United Arab Emirates,82.9091
+United Kingdom,GBR,2023,52592.684,United Kingdom,81.3015
+United States,USA,2023,74158.72,United States,79.3043
+Uruguay,URY,2023,31059.254,Uruguay,78.1385
+Uzbekistan,UZB,2023,10007.686,Uzbekistan,72.3884
+Vanuatu,VUT,2023,3214.7024,Vanuatu,71.4769
+Vietnam,VNM,2023,13545.935,Vietnam,74.5883
+World,OWID_WRL,2023,20908.848,World,73.1694
+Zambia,ZMB,2023,3673.4841,Zambia,66.3487
+Zimbabwe,ZWE,2023,5218.0225,Zimbabwe,62.7748
