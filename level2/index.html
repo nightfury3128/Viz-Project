@@ -3,9 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>GDP & Life Expectancy – Level 2 (with maps)</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    
+    <div class="page">
+        <h1>The Relationship between GDP and Life Expectancy</h1>
+        <p class="subtitle">By <strong>Nipun</strong> · Data: <a href="https://ourworldindata.org/" target="_blank" rel="noopener">Our World in Data</a> · Year shown: 2023 · <a href="../level1/L1_index.html">Level 1 only</a></p>
+
+        <div class="histogram-container">
+            <div class="chart-card" id="gdpHistogram"></div>
+            <div class="chart-card" id="lifeExpectancyHistogram"></div>
+        </div>
+
+        <div class="chart-card scatter-card" id="scatterplot"></div>
+
+        <section class="map-section">
+            <div class="map-header">
+                <h2>Spatial distribution</h2>
+                <div class="toggle-group">
+                    <button type="button" class="toggle-btn active" data-attr="gdp">GDP per Capita</button>
+                    <button type="button" class="toggle-btn" data-attr="life_expectancy">Life Expectancy</button>
+                </div>
+            </div>
+            <div class="chart-card map-card" id="choropleth"></div>
+        </section>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
