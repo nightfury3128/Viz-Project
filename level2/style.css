@@ -1,4 +1,4 @@
-/* System fonts only: uses the OS default UI font stack */
+
 * {
     box-sizing: border-box;
 }
@@ -14,7 +14,7 @@ body {
 }
 
 .page {
-    max-width: 1600px;
+    max-width: 1000px;
     margin: 0 auto;
     padding: 32px 24px 48px;
 }
@@ -35,7 +35,7 @@ h2 {
 }
 
 .subtitle {
-    margin: 0 0 36px;
+    margin: 0 0 28px;
     font-size: 0.9rem;
     color: #5a6573;
 }
@@ -50,49 +50,12 @@ h2 {
     text-decoration: underline;
 }
 
-.histogram-container {
-    display: flex;
-    justify-content: center;
-    gap: 32px;
-    flex-wrap: wrap;
-    margin-bottom: 32px;
-}
-
-.chart-card {
-    background: #fff;
-    border-radius: 12px;
-    padding: 28px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
-    border: 1px solid rgba(0, 0, 0, 0.06);
-}
-
-.chart-card.scatter-card {
-    margin: 0 auto 24px;
-    display: inline-block;
-}
-
-#gdpHistogram,
-#lifeExpectancyHistogram {
-    padding: 0;
-}
-
-#gdpHistogram svg,
-#lifeExpectancyHistogram svg,
-#scatterplot svg {
-    display: block;
-}
-
-#scatterplot {
-    padding: 0;
-}
-
-/* Level 2: map section */
 .map-section {
-    margin-top: 32px;
+    margin-top: 0;
 }
 
 .map-header {
-    margin-bottom: 12px;
+    margin-bottom: 14px;
 }
 
 .toggle-group {
@@ -105,7 +68,7 @@ h2 {
 .toggle-btn {
     font-family: inherit;
     font-size: 0.875rem;
-    padding: 8px 16px;
+    padding: 8px 18px;
     border-radius: 8px;
     border: 1px solid #c5cdd6;
     background: #fff;
@@ -125,7 +88,8 @@ h2 {
 }
 
 .map-card {
-    padding: 20px;
+    padding: 24px;
+    overflow: hidden;
 }
 
 #choropleth {
@@ -135,9 +99,9 @@ h2 {
 #choropleth svg {
     display: block;
     margin: 0 auto;
+    border-radius: 8px;
 }
 
-/* Shared chart text styling – inherits system font from body */
 .chart-card text {
     font-family: inherit;
 }

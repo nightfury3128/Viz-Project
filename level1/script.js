@@ -1,12 +1,6 @@
 // Cursor was used to help me with code snippets and debugging.
 
-const axisStyle = (g) => {
-    g.selectAll(".tick line").attr("stroke", "#c5cdd6");
-    g.selectAll(".domain").attr("stroke", "#8b95a4");
-    g.selectAll("text").attr("fill", "#4a5568").attr("font-size", "11px");
-};
-
-d3.csv("data/countries_health_wealth_single_year.csv").then(function(data) {
+d3.csv("../data/countries_health_wealth_single_year.csv").then(function(data) {
 
     data.forEach(d => {
         d.gdp = +d.gdp;
@@ -32,7 +26,6 @@ function createGDPHistogram(data) {
 
     const x = d3.scaleLinear()
         .domain(d3.extent(data, d => d.gdp))
-        .nice()
         .range([0, width]);
 
     const histogram = d3.histogram()
@@ -43,12 +36,11 @@ function createGDPHistogram(data) {
 
     const y = d3.scaleLinear()
         .domain([0, d3.max(bins, d => d.length)])
-        .nice()
         .range([height, 0]);
 
     svg.append("g")
         .selectAll("rect")
-        .data(bins)
+        .data(bins) 
         .enter()
         .append("rect")
         .attr("x", d => x(d.x0) + 1)
@@ -58,14 +50,14 @@ function createGDPHistogram(data) {
         .attr("fill", "#4a7ba7")
         .attr("rx", 2);
 
-    svg.append("g")
+    
+    svg.append("g") /* X axis */
         .attr("transform", `translate(0,${height})`)
         .call(d3.axisBottom(x))
-        .call(axisStyle);
 
-    svg.append("g")
+    svg.append("g") /*Y Axis*/
         .call(d3.axisLeft(y))
-        .call(axisStyle);
+
 
     // Titles and labels
     const textFill = "#2c3e50";
@@ -77,6 +69,8 @@ function createGDPHistogram(data) {
         .style("font-size", "15px")
         .style("font-weight", "bold")
         .text("Distribution of GDP per Capita (2023)");
+
+
     svg.append("text")
         .attr("x", width / 2)
         .attr("y", height + 35)
@@ -84,6 +78,8 @@ function createGDPHistogram(data) {
         .attr("fill", "#5a6573")
         .style("font-size", "13px")
         .text("GDP per Capita (USD)");
+
+
     svg.append("text")
         .attr("transform", "rotate(-90)")
         .attr("x", -height / 2)
@@ -139,11 +135,10 @@ function createLifeHistogram (data) {
     svg.append("g")
         .attr("transform", `translate(0,${height})`)
         .call(d3.axisBottom(x))
-        .call(axisStyle);
+
 
     svg.append("g")
         .call(d3.axisLeft(y))
-        .call(axisStyle);
 
     // Labels and Title
     const textFill = "#2c3e50";
@@ -155,6 +150,8 @@ function createLifeHistogram (data) {
         .style("font-size", "15px")
         .style("font-weight", "bold")
         .text("Distribution of Life Expectancy (2023)");
+
+        
     svg.append("text")
         .attr("x", width / 2)
         .attr("y", height + 35)
@@ -162,6 +159,7 @@ function createLifeHistogram (data) {
         .attr("fill", "#5a6573")
         .style("font-size", "13px")
         .text("Life Expectancy (Years)");
+        
     svg.append("text")
         .attr("transform", "rotate(-90)")
         .attr("x", -height / 2)
@@ -198,11 +196,9 @@ function createScatterplot(data) {
     svg.append("g")
         .attr("transform", `translate(0,${height})`)
         .call(d3.axisBottom(x))
-        .call(axisStyle);
 
     svg.append("g")
         .call(d3.axisLeft(y))
-        .call(axisStyle);
 
     svg.selectAll("circle")
         .data(data)
