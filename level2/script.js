@@ -1,8 +1,15 @@
-// Cursor was used to help me with code snippets and debugging.
-// I was having trouble with the map populating so I used the cursor to help me.
+// Level 2 only: choropleth map(s). Level 1 is separate (level1/).
+
+const DATA_PATH = "../data/";
+const NO_DATA_FILL = "#dde2e8";
+const OCEAN_FILL = "#eef1f4";
+const LAND_STROKE = "#b0b8c4";
+const STROKE_WIDTH = 0.6;
+
+
 Promise.all([
-    d3.csv("../data/countries_health_wealth_single_year.csv"),
-    d3.json("../data/world.geojson")
+    d3.csv(DATA_PATH + "countries_health_wealth_single_year.csv"),
+    d3.json(DATA_PATH + "world.geojson")
 ]).then(function([data, geojson]) {
     data.forEach(d => {
         d.gdp = +d.gdp;
@@ -24,6 +31,8 @@ function createChoropleth(attribute) {
     const padding = 48;
     const width = 880;
     const height = 480;
+    const fitWidth = width - 2 * padding;
+    const fitHeight = height - 2 * padding;
 
     const projection = d3.geoMercator()
         .fitExtent([[padding, padding], [width - padding, height - padding]], geoData);
@@ -45,13 +54,14 @@ function createChoropleth(attribute) {
 
     const mapLayer = svg.append("g").attr("class", "map-layer");
 
+    // Ocean background (full rect so edges are clean)
     mapLayer.append("rect")
         .attr("width", width)
         .attr("height", height)
-        .attr("fill", "#eef1f4")
+        .attr("fill", OCEAN_FILL)
         .attr("rx", 4);
 
-    
+    // Land: draw paths with fill and stroke
     mapLayer.selectAll("path")
         .data(geoData.features)
         .enter()
@@ -61,13 +71,13 @@ function createChoropleth(attribute) {
             const id = d.id;
             const row = id ? dataByCode[id] : null;
             const v = row ? row[attribute] : null;
-            if (v == null || isNaN(v)) return "#dde2e8";
+            if (v == null || isNaN(v)) return NO_DATA_FILL;
             return colorScale(v);
         })
-        .attr("stroke", "#b0b8c4")
-        .attr("stroke-width", 0.8);
+        .attr("stroke", LAND_STROKE)
+        .attr("stroke-width", STROKE_WIDTH);
 
-    // Legend 
+    // Legend below the map, centered
     const legendWidth = 260;
     const legendHeight = 14;
     const legendX = (width - legendWidth) / 2;
@@ -111,7 +121,6 @@ function createChoropleth(attribute) {
     axisG.selectAll(".domain").attr("stroke", "#8b95a4");
     axisG.selectAll("text").attr("fill", "#5a6573").attr("font-size", "11px");
 
-    // Label
     const label = attribute === "gdp" ? "GDP per Capita (USD)" : "Life Expectancy (years)";
     svg.append("text")
         .attr("x", width / 2)
