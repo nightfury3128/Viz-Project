@@ -284,3 +284,24 @@ h1 {
     margin: 0;
     padding: 24px;
 }
+
+/* Tooltip */
+.viz-tooltip {
+    position: absolute;
+    padding: 10px 14px;
+    background: #1c2128;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    color: #e6edf3;
+    font-size: 13px;
+    font-family: "DM Sans", sans-serif;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+    z-index: 100;
+    line-height: 1.5;
+    max-width: 240px;
+}
+.viz-tooltip strong {
+    color: #fff;
+}

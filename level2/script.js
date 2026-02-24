@@ -1,3 +1,4 @@
+// I WAS UNABLE TO GET THE SHARED BRUSING STATE WORKING RIGHT ACROSS TWO CODES FOR SOME REASON SO CURSOR ONE SHOT IT FOR ME. 
 Promise.all([
     d3.csv("../data/countries_health_wealth_single_year.csv"),
     d3.json("../data/world.geojson")
@@ -15,7 +16,12 @@ Promise.all([
     setupMapToggle();
 });
 
+let currentAttribute = "gdp"; // Default attribute is GDP
+
+const mapTooltip = d3.select("body").append("div").attr("class", "viz-tooltip");
+
 function createChoropleth(attribute) {
+    currentAttribute = attribute;
     const container = d3.select("#choropleth");
     container.selectAll("*").remove();
 
@@ -54,6 +60,7 @@ function createChoropleth(attribute) {
         .enter()
         .append("path")
         .attr("d", pathGenerator)
+        .attr("class", "country-path")
         .attr("fill", d => {
             const id = d.id;
             const row = id ? dataByCode[id] : null;
@@ -62,7 +69,25 @@ function createChoropleth(attribute) {
             return colorScale(v);
         })
         .attr("stroke", "#30363d")
-    .attr("stroke-width", 0.6);
+        .attr("stroke-width", 0.6)
+        .on("mouseover", function(event, d) {
+            const row = d.id ? dataByCode[d.id] : null;
+            if (!row) return;
+            d3.select(this).attr("stroke", "#fff").attr("stroke-width", 1.5);
+            const val = attribute === "gdp"
+                ? "$" + d3.format(",.0f")(row.gdp)
+                : d3.format(".1f")(row.life_expectancy) + " yrs";
+            mapTooltip.style("opacity", 1)
+                .html(`<strong>${row.country_x}</strong><br>${attribute === "gdp" ? "GDP" : "Life Exp"}: ${val}`);
+        })
+        .on("mousemove", function(event) {
+            mapTooltip.style("left", (event.pageX + 14) + "px")
+                .style("top", (event.pageY - 30) + "px");
+        })
+        .on("mouseout", function() {
+            d3.select(this).attr("stroke", "#30363d").attr("stroke-width", 0.6);
+            mapTooltip.style("opacity", 0);
+        });
 
     // Legend below the map
     const legendWidth = 260;
@@ -116,14 +141,40 @@ function createChoropleth(attribute) {
         .style("font-size", "12px")
         .style("font-weight", "500")
         .text(label);
+
+    if (window.brushedCodes) { 
+        highlightChoroplethPaths(window.brushedCodes);  // Highlight the countries that are being brushed in the level 1 chart (CURSOR GENERATED)
+    }
 }
 
 function setupMapToggle() {
     d3.selectAll(".toggle-btn").on("click", function() {
         const btn = d3.select(this);
-        const attr = btn.attr("data-attr");
+        const attr = btn.attr("data-attr"); 
         d3.selectAll(".toggle-btn").classed("active", false);
         btn.classed("active", true);
-        createChoropleth(attr);
+        createChoropleth(attr); // Create the choropleth map for the selected attribute (GDP or Life Expectancy)
     });
 }
+
+function highlightChoroplethPaths(codes) { // Highlight the countries that are being brushed in the level 1 chart (CURSOR GENERATED)
+    d3.selectAll(".country-path")
+        .attr("opacity", d => {
+            if (!codes) return 1;
+            const id = d.id;
+            return codes.has(id) ? 1 : 0.15;
+        })
+        .attr("stroke", d => {
+            if (!codes) return "#30363d";
+            return codes.has(d.id) ? "#fff" : "#30363d";
+        })
+        .attr("stroke-width", d => {
+            if (!codes) return 0.6;
+            return codes.has(d.id) ? 1.2 : 0.4;
+        });
+}
+
+window.highlightChoropleth = function(codes) {
+    highlightChoroplethPaths(codes);
+};
+
