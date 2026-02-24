@@ -1,64 +1,82 @@
-/* Viz Project – external stylesheet, no inline CSS */
 
-* {
-    box-sizing: border-box;
-}
+
 
 body {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-family: "DM Sans", system-ui, sans-serif;
     margin: 0;
     padding: 0;
     min-height: 100vh;
-    background: #e2e6ea;
-    color: #2c3e50;
+    background: #0f1419;
+    color: #e6edf3;
     text-align: center;
 }
 
 .page {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 24px 20px 40px;
+    padding: 40px 28px 60px;
 }
 
-/* Page header */
 .page-header {
-    margin-bottom: 28px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    margin-bottom: 48px;
+    padding: 40px 48px 36px;
+    border-radius: 24px;
+    border: 1px solid rgba(0, 212, 170, 0.2);
+    box-shadow: 0 0 60px rgba(0, 212, 170, 0.08);
+    position: relative;
+    overflow: hidden;
+}
+
+.byline {
+    display: inline-block;
+    font-family: "Space Grotesk", monospace;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #00d4aa;
+    margin-bottom: 12px;
+    padding: 6px 14px;
+    background: rgba(0, 212, 170, 0.12);
+    border-radius: 100px;
+    border: 1px solid rgba(0, 212, 170, 0.3);
 }
 
 h1 {
-    font-size: 1.75rem;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 2.75rem;
     font-weight: 700;
-    letter-spacing: -0.02em;
-    margin: 0 0 6px;
-    color: #1a252f;
+    letter-spacing: -0.04em;
+    margin: 0 0 12px;
+    color: #fff;
+    line-height: 1.15;
 }
 
-.subtitle {
-    margin: 0;
-    font-size: 0.9rem;
-    color: #5a6573;
-}
+
 
 .subtitle a {
-    color: #3d6b8c;
+    color: #00d4aa;
     text-decoration: none;
-    font-weight: 500;
+    font-weight: 600;
+    transition: color 0.2s, text-shadow 0.2s;
 }
 
-.subtitle a:hover {
-    text-decoration: underline;
-}
 
-/* Level sections – clear separation */
+/* Level sections — each with strong identity */
 .level-section {
-    margin-bottom: 32px;
-    padding: 24px;
-    border-radius: 12px;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    background: #fff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    margin-bottom: 40px;
+    padding: 32px 36px 40px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: linear-gradient(180deg, #161b22 0%, #0f1419 100%);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+
+.level-section:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4);
+    border-color: rgba(255, 255, 255, 0.1);
 }
 
 .level-section:last-child {
@@ -66,51 +84,58 @@ h1 {
 }
 
 .level-section h2 {
-    font-size: 1rem;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 1.1rem;
     font-weight: 600;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: #5a6573;
-    margin: 0 0 20px;
-    padding-bottom: 12px;
+    margin: 0 0 28px;
+    padding: 0 0 16px;
     border-bottom: 2px solid transparent;
 }
 
+
 .level-1 h2 {
-    border-bottom-color: #4a7ba7;
-    color: #2c3e50;
+    border-bottom-color: rgba(0, 212, 170, 0.4);
+    color: #00d4aa;
 }
 
+
+
 .level-2 h2 {
-    border-bottom-color: #3d7a5f;
-    color: #2c3e50;
+    border-bottom-color: rgba(124, 58, 237, 0.4);
+    color: #a78bfa;
 }
 
 .level-3 h2 {
-    border-bottom-color: #8b7355;
-    color: #2c3e50;
+    border-bottom-color: rgba(245, 158, 11, 0.4);
+    color: #fbbf24;
 }
 
-/* Shared chart card */
+/* Chart cards — dark, crisp */
 .chart-card {
-    background: #f8f9fb;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
-    border: 1px solid rgba(0, 0, 0, 0.06);
+    background: #0d1117;
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
+
 
 .chart-card text {
     font-family: inherit;
 }
 
+
+
 /* Level 1 */
 .level-1 .histogram-container {
     display: flex;
     justify-content: center;
-    gap: 24px;
+    gap: 28px;
     flex-wrap: wrap;
-    margin-bottom: 24px;
+    margin-bottom: 28px;
 }
 
 .level-1 .chart-card.scatter-card {
@@ -118,10 +143,7 @@ h1 {
     display: inline-block;
 }
 
-#gdpHistogram,
-#lifeExpectancyHistogram {
-    padding: 0;
-}
+
 
 #gdpHistogram svg,
 #lifeExpectancyHistogram svg,
@@ -135,40 +157,44 @@ h1 {
 
 /* Level 2 */
 .level-2 .map-header {
-    margin-bottom: 16px;
+    margin-bottom: 20px;
 }
 
 .toggle-group {
     display: flex;
     justify-content: center;
-    gap: 10px;
+    gap: 14px;
     flex-wrap: wrap;
 }
 
 .toggle-btn {
-    font-family: inherit;
-    font-size: 0.875rem;
-    padding: 10px 20px;
-    border-radius: 8px;
-    border: 1px solid #c5cdd6;
-    background: #fff;
-    color: #4a5568;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 14px 28px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.04);
+    color: #8b949e;
     cursor: pointer;
+    transition: all 0.2s ease;
 }
 
 .toggle-btn:hover {
-    background: #f0f2f5;
-    border-color: #8b95a4;
+    background: rgba(255, 255, 255, 0.08);
+    color: #e6edf3;
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
 .toggle-btn.active {
-    background: #4a7ba7;
-    border-color: #4a7ba7;
+    background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+    border-color: #7c3aed;
     color: #fff;
+    box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4);
 }
 
 .level-2 .map-card {
-    padding: 20px;
+    padding: 28px;
     overflow: hidden;
 }
 
@@ -179,7 +205,7 @@ h1 {
 #choropleth svg {
     display: block;
     margin: 0 auto;
-    border-radius: 8px;
+    border-radius: 12px;
 }
 
 /* Level 3 */
@@ -187,68 +213,74 @@ h1 {
     display: flex;
     justify-content: center;
     align-items: flex-end;
-    gap: 24px;
+    gap: 32px;
     flex-wrap: wrap;
-    margin-bottom: 24px;
-    padding: 20px 24px;
-    background: linear-gradient(135deg, #f8f9fb 0%, #f0f2f5 100%);
-    border-radius: 12px;
-    border: 1px solid rgba(0, 0, 0, 0.06);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    margin-bottom: 28px;
+    padding: 28px 32px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 16px;
+    border: 1px solid rgba(245, 158, 11, 0.2);
 }
 
 .control-group {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    font-size: 0.8rem;
-    color: #4a5568;
+    font-size: 0.9rem;
+    color: #8b949e;
 }
 
 .control-group label {
-    margin-bottom: 8px;
+    margin-bottom: 10px;
+    font-family: "Space Grotesk", sans-serif;
     font-weight: 600;
     font-size: 0.75rem;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: #5a6573;
+    color: #fbbf24;
 }
 
 .control-group select {
-    min-width: 200px;
-    padding: 10px 14px;
-    border-radius: 10px;
-    border: 1px solid #d1d8e0;
-    font-family: inherit;
-    font-size: 0.9rem;
-    background: #fff;
-    color: #2c3e50;
+    min-width: 220px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    font-family: "DM Sans", sans-serif;
+    font-size: 1rem;
+    background: #0d1117;
+    color: #e6edf3;
     cursor: pointer;
     transition: border-color 0.2s, box-shadow 0.2s;
     appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%235a6573' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
-    background-position: right 12px center;
-    padding-right: 36px;
+    background-position: right 16px center;
+    padding-right: 44px;
 }
 
 .control-group select:hover {
-    border-color: #a0aec0;
+    border-color: rgba(251, 191, 36, 0.5);
 }
 
 .control-group select:focus {
     outline: none;
-    border-color: #4a7ba7;
-    box-shadow: 0 0 0 3px rgba(74, 123, 167, 0.15);
+    border-color: #f59e0b;
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
 }
 
 .l3-charts {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 28px;
 }
 
 #trendChart svg,
 #yearScatter svg {
     display: block;
+}
+
+#trendChart p,
+#yearScatter p {
+    color: #8b949e;
+    margin: 0;
+    padding: 24px;
 }

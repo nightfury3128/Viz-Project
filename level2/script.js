@@ -12,17 +12,16 @@ Promise.all([
     data.forEach(d => { dataByCode[d.code] = d; });
 
     createChoropleth("gdp");
-    setupMapToggle(); // This is used for the button at the top of the level 2 section
+    setupMapToggle();
 });
 
 function createChoropleth(attribute) {
     const container = d3.select("#choropleth");
     container.selectAll("*").remove();
 
-    const padding = 48;
-    const width = 880;
-    const height = 480;
-
+    const padding = 48,
+          width = 880,
+          height = 480;
 
     const projection = d3.geoMercator()
         .fitExtent([[padding, padding], [width - padding, height - padding]], geoData);
@@ -32,8 +31,8 @@ function createChoropleth(attribute) {
     const domain = [d3.min(values), d3.max(values)];
 
     const colorScale = attribute === "gdp"
-        ? d3.scaleSequential(d3.interpolateBlues).domain(domain)
-        : d3.scaleSequential(d3.interpolateGreens).domain(domain);
+        ? d3.scaleSequential(d3.interpolateCividis).domain(domain)
+        : d3.scaleSequential(d3.interpolateViridis).domain(domain);
 
     const legendH = 44;
     const svg = container
@@ -47,7 +46,7 @@ function createChoropleth(attribute) {
     mapLayer.append("rect")
         .attr("width", width)
         .attr("height", height)
-        .attr("fill", "#eef1f4")
+        .attr("fill", "#0d1117")
         .attr("rx", 4);
 
     mapLayer.selectAll("path")
@@ -59,13 +58,13 @@ function createChoropleth(attribute) {
             const id = d.id;
             const row = id ? dataByCode[id] : null;
             const v = row ? row[attribute] : null;
-            if (v == null || isNaN(v)) return "#dde2e8";
+            if (v == null || isNaN(v)) return "#21262d";
             return colorScale(v);
         })
-        .attr("stroke", "#b0b8c4")
-        .attr("stroke-width", 0.6);
+        .attr("stroke", "#30363d")
+    .attr("stroke-width", 0.6);
 
-    // Legend below the map, centered
+    // Legend below the map
     const legendWidth = 260;
     const legendHeight = 14;
     const legendX = (width - legendWidth) / 2;
@@ -89,14 +88,12 @@ function createChoropleth(attribute) {
         .attr("width", legendWidth)
         .attr("height", legendHeight)
         .attr("fill", "url(#legend-gradient-" + attribute + ")")
-        .attr("stroke", "#8b95a4")
+        .attr("stroke", "#8b949e")
         .attr("stroke-width", 1)
         .attr("rx", 2);
 
     const legendScale = d3.scaleLinear().domain(domain).range([0, legendWidth]);
-    const format = attribute === "gdp"
-        ? d3.format(",.0f")
-        : d3.format(".1f");
+    const format = attribute === "gdp" ? d3.format(",.0f") : d3.format(".1f");
     const legendAxis = d3.axisBottom(legendScale)
         .ticks(5)
         .tickSize(6)
@@ -105,16 +102,17 @@ function createChoropleth(attribute) {
     const axisG = svg.append("g")
         .attr("transform", `translate(${legendX},${legendY + legendHeight})`)
         .call(legendAxis);
-    axisG.selectAll(".tick line").attr("stroke", "#8b95a4");
-    axisG.selectAll(".domain").attr("stroke", "#8b95a4");
-    axisG.selectAll("text").attr("fill", "#5a6573").attr("font-size", "11px");
+    axisG.selectAll(".tick line").attr("stroke", "#8b949e");
+    axisG.selectAll(".domain").attr("stroke", "#8b949e");
+    axisG.selectAll("text").attr("fill", "#8b949e").attr("font-size", "11px");
 
     const label = attribute === "gdp" ? "GDP per Capita (USD)" : "Life Expectancy (years)";
+    const textFill = "#e6edf3";
     svg.append("text")
         .attr("x", width / 2)
         .attr("y", legendY - 6)
         .attr("text-anchor", "middle")
-        .attr("fill", "#4a5568")
+        .attr("fill", textFill)
         .style("font-size", "12px")
         .style("font-weight", "500")
         .text(label);

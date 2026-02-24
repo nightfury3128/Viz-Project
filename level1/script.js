@@ -1,4 +1,3 @@
-// Cursor was used to help me with code snippets and debugging.
 
 d3.csv("../data/countries_health_wealth_single_year.csv").then(function(data) {
 
@@ -47,7 +46,7 @@ function createGDPHistogram(data) {
         .attr("y", d => y(d.length))
         .attr("width", d => x(d.x1) - x(d.x0) - 1)
         .attr("height", d => height - y(d.length))
-        .attr("fill", "#4a7ba7")
+        .attr("fill", "#00d4aa")
         .attr("rx", 2);
 
     
@@ -60,7 +59,7 @@ function createGDPHistogram(data) {
 
 
     // Titles and labels
-    const textFill = "#2c3e50";
+    const textFill = "#e6edf3";
     svg.append("text")
         .attr("x", width / 2)
         .attr("y", -5)
@@ -75,7 +74,7 @@ function createGDPHistogram(data) {
         .attr("x", width / 2)
         .attr("y", height + 35)
         .attr("text-anchor", "middle")
-        .attr("fill", "#5a6573")
+        .attr("fill", "#8b949e")
         .style("font-size", "13px")
         .text("GDP per Capita (USD)");
 
@@ -85,7 +84,7 @@ function createGDPHistogram(data) {
         .attr("x", -height / 2)
         .attr("y", -25)
         .attr("text-anchor", "middle")
-        .attr("fill", "#5a6573")
+        .attr("fill", "#8b949e")
         .style("font-size", "13px")
         .text("Number of Countries");
 }   
@@ -129,7 +128,7 @@ function createLifeHistogram (data) {
         .attr("y", d => y(d.length))
         .attr("width", d => x(d.x1) - x(d.x0) - 1)
         .attr("height", d => height - y(d.length))
-        .attr("fill", "#3d7a5f")
+        .attr("fill", "#7c3aed")
     .attr("rx", 2);
 
     svg.append("g")
@@ -141,7 +140,7 @@ function createLifeHistogram (data) {
         .call(d3.axisLeft(y))
 
     // Labels and Title
-    const textFill = "#2c3e50";
+    const textFill = "#e6edf3";
     svg.append("text")
         .attr("x", width / 2)
         .attr("y", -5)
@@ -156,7 +155,7 @@ function createLifeHistogram (data) {
         .attr("x", width / 2)
         .attr("y", height + 35)
         .attr("text-anchor", "middle")
-        .attr("fill", "#5a6573")
+        .attr("fill", "#8b949e")
         .style("font-size", "13px")
         .text("Life Expectancy (Years)");
         
@@ -165,7 +164,7 @@ function createLifeHistogram (data) {
         .attr("x", -height / 2)
         .attr("y", -30)
         .attr("text-anchor", "middle")
-        .attr("fill", "#5a6573")
+        .attr("fill", "#8b949e")
         .style("font-size", "13px")
         .text("Number of Countries");
 }
@@ -207,10 +206,11 @@ function createScatterplot(data) {
         .attr("cx", d => x(d.gdp))
         .attr("cy", d => y(d.life_expectancy))
         .attr("r", 4)
-        .attr("fill", "#4a7ba7")
-        .attr("opacity", 0.75);
+        .attr("fill", "#00d4aa")
+        .attr("opacity", 0.8);
 
-    const textFill = "#2c3e50";
+    const textFill = "#e6edf3";
+    
     svg.append("text")
         .attr("x", width / 2)
         .attr("y", -5)
@@ -219,19 +219,21 @@ function createScatterplot(data) {
         .style("font-size", "15px")
         .style("font-weight", "bold")
         .text("GDP per Capita vs Life Expectancy (2023)");
+
     svg.append("text")
         .attr("x", width / 2)
         .attr("y", height + 40)
         .attr("text-anchor", "middle")
-        .attr("fill", "#5a6573")
+        .attr("fill", "#8b949e")
         .style("font-size", "13px")
         .text("GDP per Capita (USD)");
+   
     svg.append("text")
         .attr("transform", "rotate(-90)")
         .attr("x", -height / 2)
         .attr("y", -40)
         .attr("text-anchor", "middle")
-        .attr("fill", "#5a6573")
+        .attr("fill", "#8b949e")
         .style("font-size", "13px")
         .text("Life Expectancy (Years)");
 }
