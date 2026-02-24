@@ -27,6 +27,48 @@ body {
     overflow: hidden;
 }
 
+.header-actions {
+    position: absolute;
+    top: 24px;
+    right: 28px;
+}
+
+.github-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 999px;
+    background: rgba(0, 212, 170, 0.08);
+    border: 1px solid rgba(0, 212, 170, 0.4);
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.github-logo { 
+    width: 22px;
+    height: 22px;
+    fill: #f97316;
+}
+
+.github-link:hover {
+    background: rgba(0, 212, 170, 0.16);
+    border-color: #f97316;
+    box-shadow: 0 0 24px rgba(249, 115, 22, 0.6);
+    animation: github-spin 1.6s linear infinite;
+}
+
+@keyframes github-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
 .byline {
     display: inline-block;
     font-family: "Space Grotesk", monospace;
