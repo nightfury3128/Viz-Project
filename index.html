@@ -8,8 +8,52 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>The Relationship between GDP and Life Expectancy</h1>
-    <p class="subtitle">By <strong>Nipun</strong> · Data: <a href="https://ourworldindata.org/" target="_blank" rel="noopener">Our World in Data</a> · Year shown: 2023</p>
-<a href="../level2/index.html">Level 2 (Spatial)</a>
-<a href="../level1/L1_index.html">Level 1 (Distributions & Scatter)</a>
+    <div class="page">
+        <header class="page-header">
+            <h1>The Relationship between GDP and Life Expectancy</h1>
+            <p class="subtitle">By <strong>Nipun</strong> · Data: <a href="https://ourworldindata.org/" target="_blank" rel="noopener">Our World in Data</a> · Year shown: 2023</p>
+        </header>
+
+        <section class="level-section level-1">
+            <h2>Level 1 — Distributions & correlation</h2>
+            <div class="histogram-container">
+                <div class="chart-card" id="gdpHistogram"></div>
+                <div class="chart-card" id="lifeExpectancyHistogram"></div>
+            </div>
+            <div class="chart-card scatter-card" id="scatterplot"></div>
+        </section>
+
+        <section class="level-section level-2">
+            <h2>Level 2 — Spatial distribution</h2>
+            <div class="map-header">
+                <div class="toggle-group">
+                    <button type="button" class="toggle-btn active" data-attr="gdp">GDP per Capita</button>
+                    <button type="button" class="toggle-btn" data-attr="life_expectancy">Life Expectancy</button>
+                </div>
+            </div>
+            <div class="chart-card map-card" id="choropleth"></div>
+        </section>
+
+        <section class="level-section level-3">
+            <h2>Level 3 — Trends by country & year</h2>
+            <div class="l3-controls">
+                <div class="control-group">
+                    <label for="countrySelect">Country</label>
+                    <select id="countrySelect"></select>
+                </div>
+                <div class="control-group">
+                    <label for="yearSelect">Year</label>
+                    <select id="yearSelect"></select>
+                </div>
+            </div>
+            <div class="l3-charts">
+                <div class="chart-card" id="trendChart"></div>
+                <div class="chart-card" id="yearScatter"></div>
+            </div>
+        </section>
+    </div>
+    <script src="level1/script.js"></script>
+    <script src="level2/script.js"></script>
+    <script src="level3/script.js"></script>
 </body>
+</html>

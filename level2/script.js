@@ -1,15 +1,6 @@
-// Level 2 only: choropleth map(s). Level 1 is separate (level1/).
-
-const DATA_PATH = "../data/";
-const NO_DATA_FILL = "#dde2e8";
-const OCEAN_FILL = "#eef1f4";
-const LAND_STROKE = "#b0b8c4";
-const STROKE_WIDTH = 0.6;
-
-
 Promise.all([
-    d3.csv(DATA_PATH + "countries_health_wealth_single_year.csv"),
-    d3.json(DATA_PATH + "world.geojson")
+    d3.csv("../data/countries_health_wealth_single_year.csv"),
+    d3.json("../data/world.geojson")
 ]).then(function([data, geojson]) {
     data.forEach(d => {
         d.gdp = +d.gdp;
@@ -21,7 +12,7 @@ Promise.all([
     data.forEach(d => { dataByCode[d.code] = d; });
 
     createChoropleth("gdp");
-    setupMapToggle();
+    setupMapToggle(); // This is used for the button at the top of the level 2 section
 });
 
 function createChoropleth(attribute) {
@@ -31,8 +22,7 @@ function createChoropleth(attribute) {
     const padding = 48;
     const width = 880;
     const height = 480;
-    const fitWidth = width - 2 * padding;
-    const fitHeight = height - 2 * padding;
+
 
     const projection = d3.geoMercator()
         .fitExtent([[padding, padding], [width - padding, height - padding]], geoData);
@@ -54,14 +44,12 @@ function createChoropleth(attribute) {
 
     const mapLayer = svg.append("g").attr("class", "map-layer");
 
-    // Ocean background (full rect so edges are clean)
     mapLayer.append("rect")
         .attr("width", width)
         .attr("height", height)
-        .attr("fill", OCEAN_FILL)
+        .attr("fill", "#eef1f4")
         .attr("rx", 4);
 
-    // Land: draw paths with fill and stroke
     mapLayer.selectAll("path")
         .data(geoData.features)
         .enter()
@@ -71,11 +59,11 @@ function createChoropleth(attribute) {
             const id = d.id;
             const row = id ? dataByCode[id] : null;
             const v = row ? row[attribute] : null;
-            if (v == null || isNaN(v)) return NO_DATA_FILL;
+            if (v == null || isNaN(v)) return "#dde2e8";
             return colorScale(v);
         })
-        .attr("stroke", LAND_STROKE)
-        .attr("stroke-width", STROKE_WIDTH);
+        .attr("stroke", "#b0b8c4")
+        .attr("stroke-width", 0.6);
 
     // Legend below the map, centered
     const legendWidth = 260;
