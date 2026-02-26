@@ -50,7 +50,9 @@ By comparing the two histograms to the scatterplot, users can see that the relat
 
 ### Level 2: Choropleth Map
 
-![Level 2 choropleth](level2/image.png)
+<p align="right">
+  <img src="leve2/image.png" width="600" align="right">
+</p>
 
 Level 2 moves to a **world choropleth map**. Each country is colored according to one of the variables (for example, GDP per capita or life expectancy). This view lets users see geographic patterns: which regions are consistently high or low, and how neighboring countries compare.
 
@@ -63,7 +65,9 @@ This level emphasizes spatial patterns that are not obvious in purely statistica
 
 ### Level 3: Trends Over Time
 
-![Level 3 trends view](level3/image.png)
+<p align="right">
+  <img src="level3/image.png" width="600" align="right">
+</p>
 
 Level 3 is a **trends view** focusing on how indicators change over time for one or more countries. Users can select a country (for example, from the map or a dropdown), and see:
 
