@@ -51,7 +51,7 @@ By comparing the two histograms to the scatterplot, users can see that the relat
 ### Level 2: Choropleth Map
 
 <p align="right">
-  <img src="leve2/image.png" width="600" align="right">
+  <img src="level2/image.png" width="600" align="right">
 </p>
 
 Level 2 moves to a **world choropleth map**. Each country is colored according to one of the variables (for example, GDP per capita or life expectancy). This view lets users see geographic patterns: which regions are consistently high or low, and how neighboring countries compare.
