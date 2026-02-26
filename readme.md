@@ -16,7 +16,9 @@ My design process started with an idea behind how the website should, and the id
 The overall idea behind this project is to see if GDP affects life expentancy and how the two are related. The other dataset I have taken into account is population, because I have been told that GDP is affected by population but the idea behind the website is to show how. 
 
 ### Level 1
+<p align ="right">
 ![Level 1 dashboard](level1/image.png)
+</p>
 ![Level 2 choropleth](level2/image.png)
 ![Level 3 trends view](level3/image.png)
 
