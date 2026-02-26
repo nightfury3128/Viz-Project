@@ -17,7 +17,7 @@ The overall idea behind this project is to see if GDP affects life expentancy an
 
 ### Level 1
 <p align ="right">
-![Level 1 dashboard](level1/image.png)
+<img src = "level1/image.png" width = 200 align="right">
 </p>
 ![Level 2 choropleth](level2/image.png)
 ![Level 3 trends view](level3/image.png)
