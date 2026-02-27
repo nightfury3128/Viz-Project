@@ -119,3 +119,6 @@ AI played a significant role in my workflow for this project:
 - **Debugging and learning**: Throughout development, I used AI to help understand and fix JavaScript and D3 errors—from simple issues like 404s due to incorrect file paths, to more complex problems in event handling and brushing logic. AI explanations were especially helpful while I was still learning D3’s mental model.  
 - **Feature implementation**: One of the main areas where AI directly impacted the code was the brushing and highlighting in Level 2. I had trouble making brushing work consistently and propagate across views, so I asked AI for help in structuring the code and fixing subtle bugs.  
 - **Requirements checking and documentation**: I also used AI to read the assignment description (from `assignment.txt`) and check whether my current project covered all required components. This led to, for example, adding population as a third attribute in Level 3 and refining tooltips so they fit the visual style better. AI also assisted in editing this written documentation for clarity and completeness.
+
+## Video 
+<video src="2026-02-26 20-32-33.mp4" controls width="1000"></video>
