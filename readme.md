@@ -121,4 +121,4 @@ AI played a significant role in my workflow for this project:
 - **Requirements checking and documentation**: I also used AI to read the assignment description (from `assignment.txt`) and check whether my current project covered all required components. This led to, for example, adding population as a third attribute in Level 3 and refining tooltips so they fit the visual style better. AI also assisted in editing this written documentation for clarity and completeness.
 
 ## Video 
-[📹 Watch the demo on YouTube](https://youtu.be/cejZD5rBBlE)
+[📹 Watch the demo on YouTube](https://youtu.be/cejZD5rBBlE) I aplogise for the microphone quality, my actual mic bailed on me while I was recording :(
