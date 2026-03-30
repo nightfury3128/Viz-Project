@@ -1,0 +1,114 @@
+Overview: 
+Pothole on your street?  Missed trash pick-up?   Loud party next door?  Call 3-1-1. 
+
+The city of Cincinnati has put together a data portal where you can access a variety of data about the city (all data here: https://data.cincinnati-oh.gov/.).  We are going to create an interactive visualization to help people understand 311 (Non-emergency) calls in 2025.  Where do most of these calls request service?  Are there periods of time where more requests come in?  What are the most common kinds of requests?  How long does it take for the city to respond and close the requests?  The city has a visualization of this some of this data.  I think we can do better! 
+
+This is a group project.  Please pick a group of 2-5 people to work with. 
+
+Project deadlines:
+The code and published application will be due Monday Mar 30th 11:59pm 
+The documentation for your project will be due: Tuesday Mar 31 at 11:59pm 
+Presentations for the project will be scheduled for: Wed and Fri April 1 and 3
+We can't push these deadlines- the other projects would get compressed.  Note 10% penalty per day late for each component.  
+We will have weekly check-in's on the project.  This is to motivate you to make progress every week, so you aren't finishing the project at the last minute.  A good pace would be to target 1 weeks working on the Level 1 and 2 goals, 1 week working on the Level 3 and 4 goals, and 1 week working on the Level 5 and 6 goals.  
+The Data
+Download data from 2025 here: Cincinnati_311_(Non-Emergency)_Service_Requests_20260227.csvDownload Cincinnati_311_(Non-Emergency)_Service_Requests_20260227.csv
+
+I got this from this website: https://data.cincinnati-oh.gov/efficient-service-delivery/Cincinnati-311-Non-Emergency-Service-Requests/gcej-gmiw/about_dataLinks to an external site.
+
+Real world data is messy.  You will find this is the case with this dataset.  You will likely need to preprocess the data outside your project. 
+
+Some of the columns we are focusing on:
+1. SR_TYPE and SR_TYPE_DESC - what kind of request is it?  (bulk item, pothole, graffiti clean-up)
+2. PRIORITY - does the city prioritize this request or not?
+3. DEPT_NAME - which department handles this request?
+4. METHOD_RECEIVED - how was this request initiated?  internet, phone...
+5. NEIGHBORHOOD - which neighborhood is this request in
+6. TIME_RECEIVED - when was this request initiated during the day
+7. DATE_CREATED - when was this request put into the system
+8. PLANNED_COMPLETION_DAYS - how long they say it will take
+9. DATE_CLOSED- when it is actually done
+Starter code and 1 year of 311 data: leaflet-d3-example-2026-1.zipDownload leaflet-d3-example-2026-1.zip
+Tutorial on maps: here
+Project goals: 
+For all goal levels:
+Create an interactive visualization application using d3 and javascript. (No react, svelte, typescript, or other framework.  Bootstrap and other GUI libraries are ok). 
+You can test under localhost, but submit a live, hosted, project, using vercel or other hosting services.  
+Use git regularly to commit your code.  
+Your visualizations should be displayed in a coherent layout that best presents the data, and allows someone to learn how to operate your visualization.     
+Labels, fonts, font sizes, axes marks, colors, layouts should be appropriate and professional.  The goal is to have a visualization someone can use and understand.  
+The colors in your app, should highlight the data and be appropriate for the data attributes. 
+Sketches:  Use sketching as a tool for planning your application.  
+Level 1 Goal: Map 
+DATA- For level 1 select one service type to focus on (e.g., potholes).  Pre-process and load all these service requests data. 
+MAP: Show the locations of the 311 calls for your chosen service type (columns labeled latitude and longitude) on a zoomable interactive map, using Leaflet and d3.  This will allow the user to see the spatial distribution of service requests, zoom in and see details of the site, and relate this spatial positioning to other data fields.  
+Default zoom and positioning: When we open your application, I suggest setting an initial zoom level and center position for the map, so the user immediately sees the data without needing to pan and zoom.   
+Zoom out limits- does your user need to be able to zoom out to see the whole world?
+Encoding: Show each service request as a colored point on the map (color scheme options below), positioned by latitude and longitude.  I have tested displaying these points, and have not had performance lags, so this should be achievable. Let me know ASAP of performance issues. 
+Details on demand:  When hovering over a point, provide details-on-demand about the call.  This should include the date of the call, the updated date, the public agency handling the call, the type of call and descriptive information.  
+Note- some entries may not have GPS coordinates.  Don't eliminate these items altogether, because they are part of the dataset and should be featured in the other charts.  You could indicate somewhere within the visualization how many calls are not mapped. 
+Provide a set of 'color by' options for the points on the map, which the user can activate through user interface elements:
+color by time between the requested date and the updated date 
+color by neighborhood
+color by priority
+color by public agency responding to the calls 
+design explanation for documentation:  describe the colors you selected for these options and why you selected them, referencing whether the data is nominal, ordinal, quantitative, etc. and whether the color scheme is monochromatic, diverging, or categorical.  
+Add a button that allows the user to toggle between different map background- such as from aerial images to one that shows roads/boundaries/etc.   Find backgrounds here:  
+https://leaflet-extras.github.io/leaflet-providers/preview/
+Level 2 Goals: Calls over the year timeline
+The page should include a timeline showing the number of requests placed (For your chosen request type) over the course of the year.  This view of the data should allow someone to see when in the year most calls were placed. 
+The timeline view should be clearly labeled, with axes that make it easy to interpret the data
+The timeline view should be long enough to allow someone to see trends over time and variations in number of calls. 
+Design choices:  Choose how you want to represent the data in this timeline.  Do you want to show a line chart, a bar chart, a heat-map....   Draw a sketch of your intended visualization and explain your design choices. 
+Choose how to use color for your timeline.  Are you using a neutral, desaturated color or a color scale?  Why did you make this choice?  
+Design choice: You can show # of calls per day, per week, per month...... you choose the time interval for binning the data
+Details on demand: When hovering over the timeline, provide a tooltip to give the user more information about the timeframe they are hovering over.  For instance, if plotting the data by week, show the selected week and the number of calls.
+Level 3 Goals: Attribute views
+
+A visualization that helps me see which neighborhoods make the most requests
+A visualization that shows the most common method for making requests (method-received field)
+A visualization that shows which service department is most often responsible
+A visualization that shows how many service requests are at different priority levels 
+Although these attributes are shown on the map, I want these to be given a dedicated visualization. 
+
+Design choices- which chart-type would work for these visualizations?  
+
+Design choice- how to layout these views.  Should all be visible on one screen?  Only some? 
+
+Level 4 Goals:  Linked interactions
+
+For all the visualizations in Level 2 (Timeline) and Level 3, include brushing or selection and linking actions.  A brush or selection in one visualizations should filter all the other visualizations on the screen, including the map.  This allows you to see where the high priority, late in the year requests are being made. 
+Level 5 Goals: Brushing in the map
+
+Create a brush interaction in the map to select a set of points.
+All the other visualizations should update to show the data in this selection
+Level 6 Goals: More service types
+
+Add the rest of the service types.  If this is too intensive for your computer, choose a set to focus on. 
+Color the points on the map by service type.  If you have more than 6-8, you will run out of colors.  Allow the user to turn on/off some service types on the map.  This should update all the visualizations on the screen.  
+Assign default colors to service types, but allow the user to customize the color assignment, using a web color picker.
+A visualization that shows the number of calls in different major categories- service code or service name.  You may want to group some of these codes together, as you did in the  
+ Level 7 Goals: Heatmap
+
+Aggregate the service calls using a heat-map representation on the Overleaf map
+The heatmap should update with all linked interactions
+You should still be able to brush and link in the heatmap view
+ Level 8 Goals:  Choose your own adventure
+
+Animate service calls through time
+Represent a feature in the data not mentioned above (perhaps the kinds of heavy trash??)
+ 
+
+Documentation:
+This is written documentation, posted on your portfolio site to describe your project.  For documentation: assume that someone is encountering your project for the first time. 
+Explain the motivation for your application.  What can it allow someone to understand? 
+1 section on the data: Describe the data and include a link. 
+1 section on any sketches that you used to help design your visualization environment.  
+1 section on the visualization components: Explain each view of the data, the GUI, etc.  Explain how you can interact with your application, and how the views update in response to these interactions.  Please include screenshots to illustrate, and relate these screenshots to the text.
+1 section on what your application enables you to discover: Present some findings you arrive at with your application, including screenshots.
+1 section on your process- what libraries did you use?  How did you structure your code?  How can you access it and run it?  Link to your code (and the live application, if it is deployed online). 
+1 section on challenges and future work: perhaps you struggled with the project and learned a lot, but maybe there wasn't quite time to create the project you hoped to have.  It may feel like you don't have as much to write in your documentation, so you can include a 'future works' section where you describe what you wanted to do or a 'challenges' section, where you describe what technical difficulties you encountered while doing this project, and reflect on how you might approach future projects.
+1 section on use of AI and collaboration with other students- Did you use AI?  I want to learn from you how you used it.  Note any peers who were helpful in debugging or learning as you worked on your project. 
+Include a 2-3 minute demo video, showing your application in action.  The easiest way to record this is with a screen capture tool, which also captures audio- such as Quicktime.  Use a voiceover or video captions to explain your application.  Demo videos should be sufficient on their own, but can reference your documentation.  Include the name of the project, your name, the project components, and how your application works.  You can present it on your webpage or on youtube, but linked on your webpage. 
+Presentation:
+Prepare and deliver a 5 minute presentation to the class with your group.  

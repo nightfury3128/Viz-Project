@@ -1,0 +1,290 @@
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "DM Sans", system-ui, sans-serif;
+    background: radial-gradient(circle at top right, #1a2344 0%, #0c1020 45%, #090d17 100%);
+    color: #e6edf3;
+}
+
+.page {
+    max-width: 1460px;
+    margin: 0 auto;
+    padding: 28px 24px 44px;
+}
+
+.page-header {
+    position: relative;
+    margin-bottom: 18px;
+    border-radius: 20px;
+    border: 1px solid rgba(140, 170, 255, 0.2);
+    background: linear-gradient(130deg, rgba(90, 120, 255, 0.16), rgba(0, 214, 170, 0.08));
+    padding: 30px 34px;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+}
+
+.byline {
+    display: inline-block;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #7dd3fc;
+    margin-bottom: 10px;
+}
+
+h1 {
+    margin: 0;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 2.15rem;
+    letter-spacing: -0.03em;
+}
+
+.subtitle {
+    margin: 8px 0 0;
+    color: #b8c4db;
+}
+
+.header-actions {
+    position: absolute;
+    right: 24px;
+    top: 24px;
+}
+
+.pill-btn {
+    border: 1px solid rgba(125, 211, 252, 0.45);
+    background: rgba(125, 211, 252, 0.12);
+    color: #dbeafe;
+    border-radius: 999px;
+    padding: 10px 16px;
+    font-family: "Space Grotesk", sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.pill-btn:hover {
+    border-color: #22d3ee;
+    background: rgba(34, 211, 238, 0.2);
+}
+
+.controls-card {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(160px, 1fr));
+    gap: 14px;
+    margin-bottom: 14px;
+}
+
+.control-group {
+    background: #0d1326;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 12px 14px;
+}
+
+.control-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #8ea0c4;
+}
+
+.control-group select {
+    width: 100%;
+    background: #0a1020;
+    color: #e6edf3;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    padding: 9px 10px;
+    font-family: inherit;
+}
+
+.main-grid {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    gap: 14px;
+    align-items: stretch;
+}
+
+.right-column {
+    display: grid;
+    gap: 14px;
+    align-content: start;
+}
+
+.chart-card {
+    background: linear-gradient(180deg, #111933 0%, #0b1124 100%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 14px;
+}
+
+.card-title {
+    margin-bottom: 12px;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #9fb8ff;
+}
+
+.chart-card.map-card {
+    display: flex;
+    flex-direction: column;
+    min-height: 72vh;
+}
+
+.map-card .card-title {
+    flex-shrink: 0;
+}
+
+.map-card .legend {
+    flex-shrink: 0;
+}
+
+#mapContainer {
+    position: relative;
+    width: 100%;
+    flex: 1 1 0;
+    min-height: 360px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: #1a2332;
+}
+
+#map,
+#map.leaflet-container {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    border-radius: 0;
+    outline: none;
+}
+
+.map-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 450;
+    pointer-events: none;
+}
+
+.map-overlay .points-layer {
+    pointer-events: auto;
+}
+
+.map-overlay .brush-layer {
+    pointer-events: none;
+}
+
+.map-overlay .request-dot {
+    stroke: rgba(9, 13, 23, 0.8);
+    stroke-width: 1px;
+}
+
+.map-brush-selection {
+    fill: rgba(34, 211, 238, 0.16);
+    stroke: #22d3ee;
+    stroke-width: 1px;
+    pointer-events: none;
+}
+
+.map-hint {
+    flex-shrink: 0;
+    margin: 0 0 10px;
+    font-size: 0.82rem;
+    color: #8ea0c4;
+}
+
+#timelineChart .brush .overlay {
+    fill: none;
+    pointer-events: all;
+}
+
+#timelineChart .brush .selection {
+    fill: rgba(125, 211, 252, 0.12);
+    stroke: rgba(125, 211, 252, 0.65);
+    stroke-width: 1px;
+    shape-rendering: crispEdges;
+}
+
+#timelineChart .brush .handle {
+    fill: #7dd3fc;
+}
+
+.legend {
+    margin-top: 10px;
+    font-size: 0.8rem;
+    color: #b8c4db;
+}
+
+.legend-item {
+    display: inline-flex;
+    align-items: center;
+    margin: 4px 12px 4px 0;
+}
+
+.legend-swatch {
+    width: 11px;
+    height: 11px;
+    border-radius: 999px;
+    margin-right: 8px;
+}
+
+#timelineChart svg,
+#attributeCharts svg {
+    display: block;
+}
+
+.attr-chart {
+    margin-bottom: 8px;
+}
+
+.attr-label {
+    fill: #9fb8ff;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.axis text {
+    fill: #b8c4db;
+    font-size: 11px;
+}
+
+.axis path,
+.axis line {
+    stroke: rgba(255, 255, 255, 0.2);
+}
+
+.viz-tooltip {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 9999;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(125, 211, 252, 0.35);
+    background: rgba(7, 12, 24, 0.95);
+    color: #e6edf3;
+    font-size: 12px;
+    line-height: 1.45;
+    max-width: 250px;
+}
+
+@media (max-width: 1200px) {
+    .controls-card {
+        grid-template-columns: 1fr;
+    }
+    .main-grid {
+        grid-template-columns: 1fr;
+    }
+    .chart-card.map-card {
+        min-height: 58vh;
+    }
+    #mapContainer {
+        min-height: 320px;
+    }
+}

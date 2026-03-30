@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cincinnati 311 Graffiti Explorer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="page">
+        <header class="page-header">
+            <span class="byline">311 Data Story</span>
+            <h1>Cincinnati Graffiti Requests (2025)</h1>
+            <p class="subtitle">Interactive map + linked timeline + coordinated attribute views</p>
+            <div class="header-actions">
+                <button id="clearFiltersBtn" class="pill-btn">Clear All Filters</button>
+            </div>
+        </header>
+
+        <section class="controls-card">
+            <div class="control-group">
+                <label for="mapColorBySelect">Map color by</label>
+                <select id="mapColorBySelect">
+                    <option value="days_to_close">Days to close</option>
+                    <option value="neighborhood">Neighborhood</option>
+                    <option value="priority">Priority</option>
+                    <option value="dept_name">Department</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label for="basemapSelect">Basemap</label>
+                <select id="basemapSelect">
+                    <option value="streets">Streets</option>
+                    <option value="light">Light</option>
+                    <option value="satellite">Satellite</option>
+                </select>
+            </div>
+        </section>
+
+        <section class="main-grid">
+            <div class="chart-card map-card">
+                <div class="card-title">Map view</div>
+                <p class="map-hint">Pan: left-drag the map · Brush: right-drag a box (links other views)</p>
+                <div id="mapContainer">
+                    <div id="map"></div>
+                </div>
+                <div id="mapLegend" class="legend"></div>
+            </div>
+
+            <div class="right-column">
+                <div class="chart-card" id="timelineCard">
+                    <div class="card-title">Requests over the year</div>
+                    <div id="timelineChart"></div>
+                </div>
+
+                <div class="chart-card" id="attributeCard">
+                    <div class="card-title">Attribute views</div>
+                    <div id="attributeCharts"></div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="tooltip" class="viz-tooltip"></div>
+
+    <script src="level1/script.js"></script>
+    <script src="level2/script.js"></script>
+    <script src="level3/script.js"></script>
+</body>
+</html>

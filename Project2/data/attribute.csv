@@ -1,0 +1,54 @@
+attribute,category,request_count
+neighborhood,CUF,182
+neighborhood,NORTHSIDE,126
+neighborhood,MT. ADAMS,89
+neighborhood,OVER-THE-RHINE,88
+neighborhood,EAST END,55
+neighborhood,WEST END,43
+neighborhood,DOWNTOWN,41
+neighborhood,MT. AUBURN,31
+neighborhood,CAMP WASHINGTON,28
+neighborhood,AVONDALE,27
+neighborhood,WALNUT HILLS,24
+neighborhood,LOWER PRICE HILL,21
+neighborhood,CLIFTON,19
+neighborhood,EAST PRICE HILL,18
+neighborhood,QUEENSGATE,18
+neighborhood,HYDE PARK,14
+neighborhood,CORRYVILLE,14
+neighborhood,NORTH AVONDALE - PADDOCK HILLS,13
+neighborhood,EAST WALNUT HILLS,13
+neighborhood,WEST PRICE HILL,12
+neighborhood,OAKLEY,12
+neighborhood,SPRING GROVE VILLAGE,12
+neighborhood,COLLEGE HILL,11
+neighborhood,LINWOOD,11
+neighborhood,EVANSTON,7
+neighborhood,MT. LOOKOUT,6
+neighborhood,WESTWOOD,4
+neighborhood,Unknown,4
+neighborhood,MADISONVILLE,4
+neighborhood,MT. WASHINGTON,4
+neighborhood,PENDLETON,4
+neighborhood,SOUTH FAIRMOUNT,4
+neighborhood,KENNEDY HEIGHTS,3
+neighborhood,CARTHAGE,3
+neighborhood,PLEASANT RIDGE,2
+neighborhood,SOUTH CUMMINSVILLE,2
+neighborhood,BOND HILL,1
+neighborhood,NORTH FAIRMOUNT,1
+neighborhood,HARTWELL,1
+neighborhood,EAST WESTWOOD,1
+neighborhood,SAYLER PARK,1
+neighborhood,SEDAMSVILLE,1
+neighborhood,VILLAGES AT ROLL HILL,1
+neighborhood,WINTON HILLS,1
+method_received,INTERNET,817
+method_received,311 CALL,138
+method_received,EMAIL,22
+dept_name,PUBLIC SERVICES,538
+dept_name,CINC BUILDING DEPT,412
+dept_name,PARK DEPARTMENT,27
+priority,STANDARD,969
+priority,HAZARDOUS,7
+priority,PRIORITY,1
