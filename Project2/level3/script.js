@@ -1,4 +1,6 @@
 var attrConfig = [
+    { key: "sr_major_category", label: "Major service category", color: "#a78bfa", maxBars: 8 },
+    { key: "sr_type_desc", label: "Service type (top)", color: "#22d3ee", maxBars: 10 },
     { key: "neighborhood", label: "Neighborhood", color: "#60a5fa", maxBars: 12 },
     { key: "method_received", label: "Method received", color: "#34d399", maxBars: 7 },
     { key: "dept_name", label: "Department", color: "#f59e0b", maxBars: 6 },

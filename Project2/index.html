@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cincinnati 311 Graffiti Explorer</title>
+    <title>Cincinnati 311 Service Explorer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700&display=swap" rel="stylesheet">
@@ -16,8 +16,8 @@
     <div class="page">
         <header class="page-header">
             <span class="byline">311 Data Story</span>
-            <h1>Cincinnati Graffiti Requests (2025)</h1>
-            <p class="subtitle">Interactive map + linked timeline + coordinated attribute views</p>
+            <h1>Cincinnati 311 Requests (2025)</h1>
+            <p class="subtitle">Interactive map + linked timeline + service categories + heatmap/animation</p>
             <div class="header-actions">
                 <button id="clearFiltersBtn" class="pill-btn">Clear All Filters</button>
             </div>
@@ -25,12 +25,28 @@
 
         <section class="controls-card">
             <div class="control-group">
+                <label for="serviceFocusSelect">Service focus</label>
+                <select id="serviceFocusSelect">
+                    <option value="graffiti">Graffiti</option>
+                    <option value="potholes">Potholes</option>
+                    <option value="both">Graffiti + Potholes</option>
+                </select>
+            </div>
+            <div class="control-group">
                 <label for="mapColorBySelect">Map color by</label>
                 <select id="mapColorBySelect">
                     <option value="days_to_close">Days to close</option>
+                    <option value="sr_type_desc">Service type</option>
                     <option value="neighborhood">Neighborhood</option>
                     <option value="priority">Priority</option>
                     <option value="dept_name">Department</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label for="mapRenderModeSelect">Map render mode</label>
+                <select id="mapRenderModeSelect">
+                    <option value="points">Points</option>
+                    <option value="heatmap">Heatmap</option>
                 </select>
             </div>
             <div class="control-group">
@@ -41,12 +57,22 @@
                     <option value="satellite">Satellite</option>
                 </select>
             </div>
+            <div class="control-group">
+                <label>Animation</label>
+                <div class="inline-controls">
+                    <button id="playTimeBtn" class="mini-btn">Play</button>
+                    <button id="stopTimeBtn" class="mini-btn">Stop</button>
+                </div>
+                <input type="range" id="timeAnimationSlider" min="0" max="100" value="100">
+                <div id="timeAnimationLabel" class="control-note">Showing full year</div>
+            </div>
         </section>
 
         <section class="main-grid">
             <div class="chart-card map-card">
                 <div class="card-title">Map view</div>
                 <p class="map-hint">Pan: left-drag the map · Brush: right-drag a box (links other views)</p>
+                <div id="mapCoordsInfo" class="map-coords-info"></div>
                 <div id="mapContainer">
                     <div id="map"></div>
                 </div>

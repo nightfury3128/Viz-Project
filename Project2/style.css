@@ -69,7 +69,7 @@ h1 {
 
 .controls-card {
     display: grid;
-    grid-template-columns: repeat(2, minmax(160px, 1fr));
+    grid-template-columns: repeat(5, minmax(150px, 1fr));
     gap: 14px;
     margin-bottom: 14px;
 }
@@ -99,6 +99,32 @@ h1 {
     border-radius: 10px;
     padding: 9px 10px;
     font-family: inherit;
+}
+
+.control-group input[type="range"] {
+    width: 100%;
+    margin-top: 8px;
+}
+
+.inline-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.mini-btn {
+    border: 1px solid rgba(125, 211, 252, 0.35);
+    background: rgba(125, 211, 252, 0.1);
+    color: #dbeafe;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.control-note {
+    margin-top: 6px;
+    color: #9fb1cf;
+    font-size: 12px;
 }
 
 .main-grid {
@@ -176,6 +202,10 @@ h1 {
     pointer-events: auto;
 }
 
+.map-overlay .heat-layer {
+    pointer-events: none;
+}
+
 .map-overlay .brush-layer {
     pointer-events: none;
 }
@@ -197,6 +227,12 @@ h1 {
     margin: 0 0 10px;
     font-size: 0.82rem;
     color: #8ea0c4;
+}
+
+.map-coords-info {
+    margin: 0 0 10px;
+    font-size: 12px;
+    color: #b8c4db;
 }
 
 #timelineChart .brush .overlay {

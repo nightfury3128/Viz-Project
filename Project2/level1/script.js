@@ -1,5 +1,5 @@
 
-const L1_DATA_PATH = "data/clean.csv";
+const L1_DATA_PATH = "data/Cincinnati_311_(Non-Emergency)_Service_Requests_20260227.csv";
 
 var l1Data; 
 
@@ -15,16 +15,25 @@ var barFilters = {
     neighborhood: new Set(),
     method_received: new Set(),
     dept_name: new Set(),
-    priority: new Set()
+    priority: new Set(),
+    sr_major_category: new Set(),
+    sr_type_desc: new Set()
 };
 
 var mapColorBy = "days_to_close";
+var mapRenderMode = "points";
+var serviceFocus = "graffiti";
+var animationCutoffDate = null;
+var animationTimer = null;
+var minCreatedDate = null;
+var maxCreatedDate = null;
 
 var leafletMap;
 var tileLayers;
 var activeTileLayer;
 var mapSvgOverlay;
 var dotGroup;
+var heatGroup;
 var mapBrushLayer;
 var brushRect;
 
@@ -34,11 +43,35 @@ function filterlistener(callback) {
     filterListeners.push(callback); // Linking the graphs and maps 
 }
 
+function getMajorCategory(d) {
+    var full = (d.sr_type_desc || d.sr_type || "Unknown").toUpperCase();
+    if (full.includes("POTHOLE")) return "Potholes";
+    if (full.includes("GRAFFITI")) return "Graffiti";
+    if (full.includes("TRASH") || full.includes("BULK")) return "Trash / Bulk";
+    if (full.includes("LIGHT")) return "Lighting";
+    if (full.includes("WATER")) return "Water";
+    if (full.includes("SIGN")) return "Signs";
+    if (full.includes("BUILDING") || full.includes("ZONING")) return "Building / Zoning";
+    if (full.includes("TREE") || full.includes("GRASS") || full.includes("VEGETATION")) return "Vegetation";
+    if (full.includes("SEWER") || full.includes("DRAIN")) return "Sewer / Drainage";
+    return "Other";
+}
+
 function refreshLinkedCharts() {
     filterListeners.forEach(function(fn) {
         fn();
     });
     createMapPoints(); // This is to make sure that map is updated when the filters changes
+}
+
+function isGraffitiRequest(d) {
+    var s = ((d.sr_type_desc || "") + " " + (d.sr_type || "")).toUpperCase();
+    return s.includes("GRAFFITI");
+}
+
+function isPotholeRequest(d) {
+    var s = ((d.sr_type_desc || "") + " " + (d.sr_type || "")).toUpperCase();
+    return s.includes("POTHOLE");
 }
 
 function rowHasCoords(d) {
@@ -72,6 +105,20 @@ function getFilteredRows(options) { // Cursor helped a lot with this function si
                 if (barFilters[key].size === 0) continue;
                 if (!barFilters[key].has(d[key])) return false;
             }
+        }
+
+        if (!ignore.includes("serviceFocus")) {
+            if (serviceFocus === "graffiti") {
+                if (!isGraffitiRequest(d)) return false;
+            } else if (serviceFocus === "potholes") {
+                if (!isPotholeRequest(d)) return false;
+            } else if (serviceFocus === "both") {
+                if (!(isGraffitiRequest(d) || isPotholeRequest(d))) return false;
+            }
+        }
+
+        if (!ignore.includes("animation") && animationCutoffDate && d.date_created > animationCutoffDate) {
+            return false;
         }
 
         if (bounds && rowHasCoords(d) && !coordsInsideBounds(d, bounds)) {
@@ -110,6 +157,9 @@ function resetAllFilters() {
     Object.keys(barFilters).forEach(function(key) {
         barFilters[key].clear();
     });
+    stopAnimation();
+    animationCutoffDate = null;
+    syncAnimationControls();
     hideBrushRect();
     refreshLinkedCharts();
 }
@@ -119,22 +169,47 @@ function setMapColorByField(field) {
     createMapPoints();
 }
 
+function setMapRenderMode(mode) {
+    mapRenderMode = mode;
+    createMapPoints();
+}
+
+function setServiceFocus(next) {
+    serviceFocus = next;
+    stopAnimation();
+    animationCutoffDate = null;
+    syncAnimationControls();
+    refreshLinkedCharts();
+}
+
 function convertCsvRow(d) {
+    var parseIsoDate = d3.timeParse("%Y-%m-%d");
+    var parsePortalDate = d3.timeParse("%Y %b %d %I:%M:%S %p");
+    var created = d.DATE_CREATED ? parsePortalDate(d.DATE_CREATED) : parseIsoDate(d.date_created || "");
+    var closed = d.DATE_CLOSED ? parsePortalDate(d.DATE_CLOSED) : parseIsoDate(d.date_closed || "");
+    var desc = (d.SR_TYPE_DESC || d.sr_type_desc || "Unknown").trim();
+    var srType = (d.SR_TYPE || d.sr_type || "Unknown").trim();
+    var planned = +(d.PLANNED_COMPLETION_DAYS || d.planned_completion_days);
+    var lat = d.LATITUDE !== undefined ? +d.LATITUDE : +d.latitude;
+    var lon = d.LONGITUDE !== undefined ? +d.LONGITUDE : +d.longitude;
+    var daysToClose = closed && created ? Math.floor((closed - created) / (1000 * 60 * 60 * 24)) : null;
+
     return {
-        sr_number: d.sr_number,
-        sr_type: d.sr_type,
-        sr_type_desc: d.sr_type_desc,
-        priority: d.priority || "Unknown",
-        dept_name: d.dept_name || "Unknown",
-        method_received: d.method_received || "Unknown",
-        neighborhood: d.neighborhood || "Unknown",
-        time_received: d.time_received || "",
-        date_created: d.date_created ? d3.timeParse("%Y-%m-%d")(d.date_created) : null,
-        date_closed: d.date_closed ? d3.timeParse("%Y-%m-%d")(d.date_closed) : null,
-        planned_completion_days: +d.planned_completion_days,
-        days_to_close: d.days_to_close === "" ? null : +d.days_to_close,
-        latitude: d.latitude === "" ? null : +d.latitude,
-        longitude: d.longitude === "" ? null : +d.longitude
+        sr_number: d.SR_NUMBER || d.sr_number,
+        sr_type: srType,
+        sr_type_desc: desc,
+        sr_major_category: getMajorCategory({ sr_type: srType, sr_type_desc: desc }),
+        priority: d.PRIORITY || d.priority || "Unknown",
+        dept_name: d.DEPT_NAME || d.dept_name || "Unknown",
+        method_received: d.METHOD_RECEIVED || d.method_received || "Unknown",
+        neighborhood: d.NEIGHBORHOOD || d.neighborhood || "Unknown",
+        time_received: d.TIME_RECEIVED || d.time_received || "",
+        date_created: created,
+        date_closed: closed,
+        planned_completion_days: isNaN(planned) ? null : planned,
+        days_to_close: daysToClose == null || daysToClose < 0 ? null : daysToClose,
+        latitude: isNaN(lat) ? null : lat,
+        longitude: isNaN(lon) ? null : lon
     };
 }
 
@@ -163,6 +238,7 @@ function setupLeafletMap() {
         .attr("class", "map-overlay");
 
     dotGroup = mapSvgOverlay.append("g").attr("class", "points-layer");
+    heatGroup = mapSvgOverlay.append("g").attr("class", "heat-layer");
     mapBrushLayer = mapSvgOverlay.append("g").attr("class", "brush-layer");
 
     leafletMap.on("zoom move resize", function() {
@@ -333,11 +409,66 @@ function buildColorScale(colorBy, data) {
     };
 }
 
+function drawMapHeatmap(withCoords) {
+    dotGroup.selectAll("*").remove();
+    var cellSize = 26;
+    var bins = {};
+
+    withCoords.forEach(function(d) {
+        var p = leafletMap.latLngToContainerPoint([d.latitude, d.longitude]);
+        var gx = Math.floor(p.x / cellSize);
+        var gy = Math.floor(p.y / cellSize);
+        var key = gx + "|" + gy;
+        bins[key] = (bins[key] || 0) + 1;
+    });
+
+    var cells = Object.keys(bins).map(function(key) {
+        var parts = key.split("|");
+        return {
+            gx: +parts[0],
+            gy: +parts[1],
+            count: bins[key]
+        };
+    });
+
+    var maxCount = d3.max(cells, function(d) { return d.count; }) || 1;
+    var heatScale = d3.scaleSequential(d3.interpolateYlOrRd).domain([1, maxCount]);
+
+    heatGroup.selectAll("rect")
+        .data(cells, function(d) { return d.gx + "|" + d.gy; })
+        .join("rect")
+        .attr("x", function(d) { return d.gx * cellSize; })
+        .attr("y", function(d) { return d.gy * cellSize; })
+        .attr("width", cellSize)
+        .attr("height", cellSize)
+        .attr("fill", function(d) { return heatScale(d.count); })
+        .attr("fill-opacity", function(d) { return 0.2 + (d.count / maxCount) * 0.65; });
+
+    drawMapLegend({
+        kind: "numbers",
+        domain: [1, maxCount],
+        scale: heatScale,
+        labelSuffix: " calls / cell"
+    });
+}
+
 function createMapPoints() { // CURSOR TOOK OVER THIS FUNCTION SINCE I COULD NOT GET THE PROPER CIRCLE SIZE WITHOUT IT LOOKING TERRIBLE (I DO NOT HAVE ANY ARTISTIC SKILLS)
     var filtered = getFilteredRows();
     var withCoords = filtered.filter(function(d) {
         return d.latitude != null && d.longitude != null && !isNaN(d.latitude) && !isNaN(d.longitude);
     });
+    var unmappedCount = filtered.length - withCoords.length;
+    var coordsInfoEl = document.getElementById("mapCoordsInfo");
+    if (coordsInfoEl) {
+        coordsInfoEl.textContent = "Mapped: " + withCoords.length + " | Missing GPS: " + unmappedCount;
+    }
+
+    if (mapRenderMode === "heatmap") {
+        drawMapHeatmap(withCoords);
+        return;
+    }
+
+    heatGroup.selectAll("*").remove();
 
     var colorInfo = buildColorScale(mapColorBy, withCoords.length ? withCoords : l1Data);
     var colorScale = colorInfo.scale;
@@ -403,12 +534,12 @@ function drawMapLegend(colorInfo) { // The legend at the bottom of the map gets 
             item.append("span")
                 .attr("class", "legend-swatch")
                 .style("background", colorInfo.scale(value));
-            item.append("span").text(d3.format(".0f")(value) + " days");
+            item.append("span").text(d3.format(".0f")(value) + (colorInfo.labelSuffix || " days"));
         }
         return;
     }
 
-    colorInfo.categories.slice(0, 10).forEach(function(category) {
+    colorInfo.categories.slice(0, 14).forEach(function(category) {
         var item = legend.append("span").attr("class", "legend-item");
         item.append("span")
             .attr("class", "legend-swatch")
@@ -417,7 +548,54 @@ function drawMapLegend(colorInfo) { // The legend at the bottom of the map gets 
     });
 }
 
+function syncAnimationControls() {
+    var slider = document.getElementById("timeAnimationSlider");
+    var label = document.getElementById("timeAnimationLabel");
+    if (!slider || !label || !minCreatedDate || !maxCreatedDate) return;
+    var totalDays = Math.max(1, d3.timeDay.count(minCreatedDate, maxCreatedDate));
+
+    slider.max = String(totalDays);
+    if (!animationCutoffDate) {
+        slider.value = String(totalDays);
+        label.textContent = "Showing full year";
+    } else {
+        var offset = d3.timeDay.count(minCreatedDate, animationCutoffDate);
+        slider.value = String(Math.max(0, Math.min(totalDays, offset)));
+        label.textContent = "Showing through " + d3.timeFormat("%b %d, %Y")(animationCutoffDate);
+    }
+}
+
+function startAnimation() {
+    if (!minCreatedDate || !maxCreatedDate) return;
+    stopAnimation();
+    var current = minCreatedDate;
+    animationCutoffDate = current;
+    syncAnimationControls();
+    refreshLinkedCharts();
+    animationTimer = setInterval(function() {
+        current = d3.timeDay.offset(current, 7);
+        if (current > maxCreatedDate) {
+            stopAnimation();
+            return;
+        }
+        animationCutoffDate = current;
+        syncAnimationControls();
+        refreshLinkedCharts();
+    }, 140);
+}
+
+function stopAnimation() {
+    if (animationTimer) {
+        clearInterval(animationTimer);
+        animationTimer = null;
+    }
+}
+
 function setupMapControls() {
+    d3.select("#serviceFocusSelect").on("change", function() {
+        setServiceFocus(this.value);
+    });
+
     d3.select("#mapColorBySelect").on("change", function() {
         setMapColorByField(this.value);
     });
@@ -427,6 +605,31 @@ function setupMapControls() {
         if (!next || next === activeTileLayer) return;
         leafletMap.removeLayer(activeTileLayer);
         activeTileLayer = next.addTo(leafletMap);
+    });
+
+    d3.select("#mapRenderModeSelect").on("change", function() {
+        setMapRenderMode(this.value);
+    });
+
+    d3.select("#playTimeBtn").on("click", function() {
+        startAnimation();
+    });
+
+    d3.select("#stopTimeBtn").on("click", function() {
+        stopAnimation();
+        animationCutoffDate = null;
+        syncAnimationControls();
+        refreshLinkedCharts();
+    });
+
+    d3.select("#timeAnimationSlider").on("input", function() {
+        stopAnimation();
+        var days = +this.value;
+        var date = d3.timeDay.offset(minCreatedDate, days);
+        if (date >= maxCreatedDate) animationCutoffDate = null;
+        else animationCutoffDate = date;
+        syncAnimationControls();
+        refreshLinkedCharts();
     });
 
     d3.select("#clearFiltersBtn").on("click", function() {
@@ -446,8 +649,15 @@ window.resetAllFilters = resetAllFilters;
 window.setMapColorByField = setMapColorByField;
 
 d3.csv(L1_DATA_PATH, convertCsvRow).then(function(rows) {
-    l1Data = rows.filter(function(d) { return d.date_created != null; }); // This is to filter out the rows that do not have a date created technically should be done in the data clean up but I was not sure about my data clean up so this is just a sanity check 
+    l1Data = rows.filter(function(d) {
+        return d.date_created != null && d.date_created.getFullYear() === 2025;
+    });
+
+    minCreatedDate = d3.min(l1Data, function(d) { return d.date_created; });
+    maxCreatedDate = d3.max(l1Data, function(d) { return d.date_created; });
+
     setupLeafletMap();
     setupMapControls();
+    syncAnimationControls();
     refreshLinkedCharts();
 });
