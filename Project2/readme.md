@@ -114,10 +114,9 @@ This application helped me realise the number of graffiti all across campus and 
 - Designing a compact UI that remains readable as features increase
 
 ### Future Work
-- Add explicit axis titles and additional annotation overlays
-- Add optional advanced service-type multi-select mode
-- Add richer Level 8 feature (e.g., day-of-week/time-of-day composition)
-- Improve storytelling with saved “scenes” or presets
+- Add something to improve loading times like lazy loading 
+- Maybe introduce a caching machanism to allow for all the years to be visible clealy
+- Add more points and work on improving the overall design 
 
 ---
 
@@ -138,3 +137,5 @@ All AI suggestions were manually reviewed, tested, and adapted to project requir
 - **Nipun Chandra**: Prompted Chatgpt and Cursor (Auto mode) and looked at the code to make sure all the errors and working with the design process. 
 - **Cursor**: implemented the entire project
 
+### Demo Video
+[![Watch the demo](https://img.youtube.com/vi/ajAwV72rKLk/hqdefault.jpg)](https://youtu.be/ajAwV72rKLk)
