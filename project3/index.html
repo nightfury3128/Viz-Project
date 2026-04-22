@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Daredevil — Character Intelligence Dashboard</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- HERO -->
+  <header id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">DAREDEVIL</h1>
+      <p class="hero-subtitle">Character Intelligence Dashboard</p>
+    </div>
+  </header>
+
+  <!-- GLOBAL CONTROLS -->
+  <nav id="global-controls">
+    <div class="controls-inner">
+      <div class="ctrl-group">
+        <label class="ctrl-label">Season</label>
+        <div class="btn-group" id="season-btns">
+          <button class="btn-pill active" data-season="all">All</button>
+          <button class="btn-pill" data-season="1">S1</button>
+          <button class="btn-pill" data-season="2">S2</button>
+          <button class="btn-pill" data-season="3">S3</button>
+        </div>
+      </div>
+      <div class="ctrl-group slider-group">
+        <label class="ctrl-label">Episode <span id="ep-label">All</span></label>
+        <input type="range" id="episode-slider" min="0" max="35" value="0" step="1" />
+      </div>
+      <div class="ctrl-group">
+        <label class="ctrl-label">Character</label>
+        <select id="character-selector"><option value="all">All Characters</option></select>
+      </div>
+      <div class="ctrl-group">
+        <label class="ctrl-label">Identity</label>
+        <div class="btn-group">
+          <button class="btn-pill active" id="lawyer-btn" data-mode="lawyer"><span class="dot dot-blue"></span>Matt</button>
+          <button class="btn-pill" id="vigilante-btn" data-mode="vigilante"><span class="dot dot-red"></span>Vigilante</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- SECTION 1 — OVERVIEW -->
+  <section class="viz-section fade-section" id="section-overview">
+    <div class="section-head">
+      <span class="sec-num">01</span>
+      <h2>Character Overview</h2>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-top"><h3>Character Importance</h3><p>Total dialogue lines</p></div>
+        <div class="chart-area" id="bar-chart"></div>
+      </div>
+      <div class="card">
+        <div class="card-top"><h3>Episode Heatmap</h3><p>Lines per character per episode</p></div>
+        <div class="chart-area" id="heatmap-chart"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 2 — NETWORK -->
+  <section class="viz-section fade-section" id="section-network">
+    <div class="section-head">
+      <span class="sec-num">02</span>
+      <h2>Relationship Network</h2>
+    </div>
+    <div class="net-controls">
+      <button id="play-btn" class="btn-accent">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        <span id="play-label">Play</span>
+      </button>
+      <button id="reset-btn" class="btn-ghost">Reset</button>
+      <div id="net-progress-wrap" class="net-progress-wrap">
+        <div id="net-progress-bar" class="net-progress-bar"></div>
+      </div>
+    </div>
+    <div class="net-wrap">
+      <span id="net-ep-label" class="net-ep-text">All Episodes</span>
+      <div id="net-info" class="net-info"></div>
+      <svg id="network-svg"></svg>
+    </div>
+  </section>
+
+  <!-- SECTION 3 — LANGUAGE -->
+  <section class="viz-section fade-section" id="section-language">
+    <div class="section-head">
+      <span class="sec-num">03</span>
+      <h2>Language &amp; Dialogue</h2>
+    </div>
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-top"><h3>Word Cloud</h3><p>Most spoken words</p></div>
+        <div class="chart-area" id="wordcloud-area"></div>
+      </div>
+      <div class="card">
+        <div class="card-top"><h3>Top Words</h3><p>Frequency ranking</p></div>
+        <div class="chart-area" id="wordfreq-chart"></div>
+      </div>
+      <div class="card">
+        <div class="card-top"><h3>Word Trend</h3><p>Usage across episodes</p></div>
+        <div class="kw-chips" id="word-trend-keywords"></div>
+        <div class="chart-area chart-area-sm" id="wordtrend-chart"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4 — INSIGHTS -->
+  <section class="viz-section fade-section" id="section-insights">
+    <div class="section-head">
+      <span class="sec-num">04</span>
+      <h2>Identity &amp; Themes</h2>
+    </div>
+
+    <!-- Identity Timeline -->
+    <div class="card card-full">
+      <div class="card-top">
+        <h3>Identity Timeline</h3>
+        <p>Blue = Lawyer &middot; Red = Vigilante &middot; Purple = Conflict</p>
+      </div>
+      <div id="identity-timeline" class="chart-area"></div>
+      <div id="identity-insight" class="insight-label"></div>
+    </div>
+
+    <div class="grid-2" style="margin-top:1rem">
+      <!-- Theme Tracker -->
+      <div class="card">
+        <div class="card-top">
+          <h3>Theme Tracker</h3>
+          <p>Keyword density per episode</p>
+        </div>
+        <div class="theme-btns" id="theme-btns"></div>
+        <div class="chart-area" id="theme-chart"></div>
+      </div>
+      <!-- Emotion Timeline -->
+      <div class="card">
+        <div class="card-top">
+          <h3>Emotion Timeline</h3>
+          <p>Scene-by-scene dominant emotion</p>
+        </div>
+        <div class="chart-area" id="emotion-timeline"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 5 — MAP -->
+  <section class="viz-section fade-section" id="section-map">
+    <div class="section-head">
+      <span class="sec-num">05</span>
+      <h2>Hell's Kitchen</h2>
+    </div>
+    <div class="map-grid">
+      <div id="leaflet-map"></div>
+      <div class="map-panel">
+        <h4>Locations</h4>
+        <div id="map-legend-list"></div>
+        <hr class="sep" />
+        <div id="map-selected-info"><p class="muted">Click a marker</p></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>Daredevil Dashboard &mdash; D3.js + Leaflet.js &middot; Netflix Transcripts</p>
+  </footer>
+
+
+  <div id="tooltip" class="tooltip"></div>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>
