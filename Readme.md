@@ -55,8 +55,6 @@ Possible users include:
 * Spider-Man fans
 * Marvel fans
 * Movie fans
-* General audiences interested in IMDb ratings and box office data
-* People comparing Spider-Man actors or film eras
 * Fans discussing whether *Into the Spider-Verse* outperformed similar animated movies
 
 ---
@@ -87,11 +85,9 @@ The visual design is one of the strongest parts of the dashboard. The color choi
 
 The dashboard is also easy to use overall. The charts and filters allow users to explore the data without needing technical knowledge. The interface supports casual comparison, which fits the intended audience of Spider-Man fans and general movie viewers.
 
-However, some design choices could be improved. The main graph can feel crowded, especially when many movies or categories are displayed at once. A more minimal layout could make the data easier to read. Some filters are also difficult to see because the colors do not always provide enough contrast. This creates an accessibility issue and may make the dashboard harder to use for people with visual impairments or users viewing it on smaller screens.
+However, some design choices could be improved. The main graph can feel crowded, especially when many movies or categories are displayed at once. A more minimal layout could make the data easier to read. 
 
 A better version of the dashboard could improve the design by:
-
-* Increasing contrast between filters, text, and background colors
 * Reducing clutter in the main chart
 * Adding clearer labels and legends
 * Using tooltips to explain values when users hover over charts
@@ -107,10 +103,6 @@ Although the visualization is useful, it has several limitations.
 First, the dashboard depends heavily on IMDb data, which may not tell the full story of a movie's success. IMDb ratings are based on user reviews and may be affected by fan behavior, popularity, or review bias. Box office performance also depends on release timing, marketing, budget, and international availability.
 
 Second, the visualization does not clearly explain where the data came from or when it was collected. This makes it harder for users to know whether the information is current.
-
-Third, the dashboard may not allow users to compare every movie in detail. For example, users may not be able to compare budget, profit, critic reviews, audience demographics, streaming performance, or awards.
-
-Finally, the crowded layout and low-contrast filters limit usability. Users can still explore the dashboard, but some parts of the interface may take extra effort to understand.
 
 ---
 
