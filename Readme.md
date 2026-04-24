@@ -65,51 +65,19 @@ Possible users include:
 
 This visualization allows users to ask and answer several types of questions about Spider-Man movies and related films.
 
-### Question 1: Which Spider-Man movie made the most money?
-
-Users can answer this by looking at the box office chart and comparing the revenue values for each Spider-Man movie.
-
-![Box office comparison view](images/box-office-comparison.png)
-
-*Figure 2. Box office comparison view showing how different Spider-Man movies performed financially.*
-
-**Example insight:** A user may notice that live-action Spider-Man movies generally earned more at the box office than some animated entries, but *Into the Spider-Verse* still performed strongly when compared with other animated superhero films.
-
----
-
-### Question 2: How did *Into the Spider-Verse* perform against other animated movies?
+### Question 1: How did *Into the Spider-Verse* perform against other animated movies?
 
 Users can filter the dashboard by genre or movie type to compare *Into the Spider-Verse* with other animated films.
 
 ![Animated movie comparison view](images/animated-comparison.png)
 
-*Figure 3. Filtered comparison showing Into the Spider-Verse against other animated or superhero movies.*
-
-**Example insight:** A user may find that *Into the Spider-Verse* has a strong IMDb rating compared with many other animated superhero films, suggesting that it was especially well received by audiences.
-
 ---
 
-### Question 3: Which Spider-Man actor appeared in which movies?
+### Question 2: Which Spider-Man actor appeared in which movies?
 
 The dashboard can help users explore connections between actors and movies. This is useful for comparing actors such as Tobey Maguire, Andrew Garfield, Tom Holland, and voice actors from the Spider-Verse films.
 
 ![Actor comparison view](images/actor-comparison.png)
-
-*Figure 4. Actor-focused view showing which actors are connected to different Spider-Man movies.*
-
-**Example insight:** A user could compare how different Spider-Man actors are connected to different movie eras and see which films are associated with each actor.
-
----
-
-### Question 4: Which Spider-Man movie has the highest IMDb rating?
-
-Users can compare IMDb ratings across the movie list or rating chart.
-
-![IMDb rating comparison view](images/imdb-rating-comparison.png)
-
-*Figure 5. IMDb rating comparison showing audience ratings across different Spider-Man movies.*
-
-**Example insight:** A user may discover that the highest-grossing movie is not always the highest-rated movie. This helps separate financial success from audience reception.
 
 ---
 
