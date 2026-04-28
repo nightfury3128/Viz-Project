@@ -14,6 +14,49 @@ BRACKET_MARKER_PATTERN = re.compile(r"^\[\s*(.*?)\s*\]$")
 EPISODE_PATTERN = re.compile(r"(?P<season>\d{2})x(?P<episode>\d{2})", re.IGNORECASE)
 SPEAKER_PATTERN = re.compile(r"^\s*(?P<speaker>[A-Z][A-Z0-9 .'\-()/&]+?)\s*:\s*(?P<line>.+?)\s*$")
 
+EMOTION_LABELS = ("anger", "disgust", "fear", "joy", "neutral", "sadness", "surprise")
+NEGATIVE_TOKENS = {
+    "kill",
+    "dead",
+    "die",
+    "blood",
+    "hurt",
+    "pain",
+    "afraid",
+    "fear",
+    "threat",
+    "danger",
+    "hate",
+    "angry",
+    "rage",
+    "devil",
+    "hell",
+    "guilty",
+    "betray",
+    "betrayed",
+}
+POSITIVE_TOKENS = {
+    "love",
+    "thank",
+    "thanks",
+    "hope",
+    "safe",
+    "trust",
+    "friend",
+    "friends",
+    "family",
+    "care",
+    "caring",
+    "forgive",
+    "forgiven",
+    "better",
+    "happy",
+    "proud",
+    "together",
+}
+SURPRISE_TOKENS = {"what", "wait", "why", "how", "suddenly", "impossible", "seriously"}
+SADNESS_TOKENS = {"sorry", "loss", "grief", "alone", "cry", "cried", "miss", "regret"}
+
 
 def parse_file(file_path: Path) -> Tuple[str, int]:
     """
@@ -227,6 +270,69 @@ def _chunk_text_by_tokens(
     return chunks
 
 
+def _normalize_emotion_space(scores: Dict[str, float]) -> Dict[str, float]:
+    normalized = {label: 0.0 for label in EMOTION_LABELS}
+    for label, value in scores.items():
+        if label in normalized:
+            normalized[label] = max(0.0, float(value))
+
+    total = sum(normalized.values())
+    if total <= 0:
+        normalized["neutral"] = 1.0
+        return normalized
+
+    for label in normalized:
+        normalized[label] /= total
+    return normalized
+
+
+def _heuristic_emotion_scores(scene_text: str) -> Dict[str, float]:
+    lower_text = scene_text.lower()
+    tokens = re.findall(r"[a-z']+", lower_text)
+    token_count = max(1, len(tokens))
+
+    positive_hits = sum(1 for t in tokens if t in POSITIVE_TOKENS)
+    negative_hits = sum(1 for t in tokens if t in NEGATIVE_TOKENS)
+    sadness_hits = sum(1 for t in tokens if t in SADNESS_TOKENS)
+    surprise_hits = sum(1 for t in tokens if t in SURPRISE_TOKENS)
+
+    questions = scene_text.count("?")
+    exclamations = scene_text.count("!")
+    speaker_turns = sum(1 for segment in scene_text.split(" ") if segment.endswith(":"))
+
+    positive_density = positive_hits / token_count
+    negative_density = negative_hits / token_count
+    sadness_density = sadness_hits / token_count
+    surprise_density = surprise_hits / token_count
+    intensity = min(1.0, (questions + exclamations) / 12.0)
+    social_density = min(1.0, speaker_turns / 20.0)
+
+    # Base priors keep distributions non-degenerate but weak.
+    heuristics = {
+        "anger": 0.10 + 1.20 * negative_density + 0.30 * intensity,
+        "disgust": 0.08 + 0.55 * negative_density,
+        "fear": 0.10 + 0.85 * negative_density + 0.45 * intensity,
+        "joy": 0.08 + 1.30 * positive_density + 0.40 * social_density,
+        "neutral": 0.20 + 0.20 * max(0.0, 1.0 - (positive_density + negative_density + intensity)),
+        "sadness": 0.10 + 1.15 * sadness_density + 0.35 * negative_density,
+        "surprise": 0.08 + 0.90 * surprise_density + 0.55 * intensity,
+    }
+    return _normalize_emotion_space(heuristics)
+
+
+def _blend_scores(model_scores: Dict[str, float], heuristic_scores: Dict[str, float]) -> Dict[str, float]:
+    # Model is primary signal; heuristics provide social/context correction.
+    model_weight = 0.75
+    heuristic_weight = 0.25
+    combined: Dict[str, float] = {}
+    for label in EMOTION_LABELS:
+        combined[label] = (
+            model_weight * model_scores.get(label, 0.0)
+            + heuristic_weight * heuristic_scores.get(label, 0.0)
+        )
+    return _normalize_emotion_space(combined)
+
+
 def compute_emotion(
     scene_text: str,
     classifier,
@@ -238,7 +344,7 @@ def compute_emotion(
       - chunking long scene text
       - scoring each chunk with HF pipeline(return_all_scores=True)
       - averaging emotion scores across chunks
-      - applying custom decision rules to select dominant emotion
+      - selecting dominant emotion from averaged scores
     Returns:
       dominant_emotion, emotion_scores_json
     """
@@ -273,38 +379,38 @@ def compute_emotion(
         return "unknown", json.dumps({})
 
     averaged_scores = {k: v / chunk_count for k, v in aggregate_scores.items()}
+    model_scores = _normalize_emotion_space(averaged_scores)
+    heuristic_scores = _heuristic_emotion_scores(scene_text)
+    blended_scores = _blend_scores(model_scores, heuristic_scores)
 
-    # ----- Custom emotion mapping logic -----
-    anger = averaged_scores.get("anger", 0.0)
-    fear = averaged_scores.get("fear", 0.0)
-    sadness = averaged_scores.get("sadness", 0.0)
-    disgust = averaged_scores.get("disgust", 0.0)
+    # Keep the model's native emotion space so the dashboard can show the full
+    # emotional mix instead of collapsing categories via manual remapping.
+    dominant_emotion = max(blended_scores, key=blended_scores.get)
 
-    # Rule 1 — Disgust reinterpretation
-    if disgust > 0.4 and sadness > 0.2:
-        dominant_emotion = "sadness"
-    # Rule 2 — Strong sadness override
-    elif sadness > 0.4:
-        dominant_emotion = "sadness"
-    # Rule 3 — Anger detection
-    elif anger > 0.4:
-        dominant_emotion = "anger"
-    # Rule 4 — Fear detection
-    elif fear > 0.4:
-        dominant_emotion = "fear"
-    # Rule 5 — Default fallback to max
-    else:
-        dominant_emotion = max(averaged_scores, key=averaged_scores.get)
+    # Reduce "neutral" overuse in emotionally rich scenes.
+    if dominant_emotion == "neutral":
+        ranked = sorted(blended_scores.items(), key=lambda x: x[1], reverse=True)
+        second_label, second_score = ranked[1]
+        top_score = ranked[0][1]
+        emotional_mass = 1.0 - blended_scores.get("neutral", 0.0)
+        if emotional_mass >= 0.45 and (top_score - second_score) <= 0.08:
+            dominant_emotion = second_label
 
-    # Normalize final labels
-    allowed_labels = {"anger", "fear", "sadness", "joy", "neutral"}
-    if dominant_emotion == "disgust":
-        dominant_emotion = "sadness"
-    elif dominant_emotion not in allowed_labels:
+    # Normalize final labels to known categories used in the frontend.
+    allowed_labels = {
+        "anger",
+        "fear",
+        "sadness",
+        "joy",
+        "neutral",
+        "disgust",
+        "surprise",
+    }
+    if dominant_emotion not in allowed_labels:
         dominant_emotion = "neutral"
 
-    # Stable ordering for reproducibility (store original averaged scores)
-    ordered_scores = dict(sorted(averaged_scores.items(), key=lambda x: x[0]))
+    # Stable ordering for reproducibility.
+    ordered_scores = dict(sorted(blended_scores.items(), key=lambda x: x[0]))
     return dominant_emotion, json.dumps(ordered_scores, ensure_ascii=False)
 
 

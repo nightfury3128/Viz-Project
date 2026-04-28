@@ -168,10 +168,21 @@ function renderBar(){
 function renderHeatmap(){
   const ct=document.getElementById("heatmap-chart");ct.innerHTML="";
   const episodes=getEpsForSeason();
-  const chars=S.char==="all" ? CORE_CHARS.slice(0,10) : [S.char].filter(ch=>CORE_CHARS.includes(ch));
+  let scopedLines=S.lines;
+  if(S.season!=="all") scopedLines=scopedLines.filter(d=>d.season===+S.season);
+  if(S.epIdx>0){
+    const e=getEpCode(S.epIdx);
+    scopedLines=scopedLines.filter(d=>d.ep===e);
+  }
+
+  const chars=S.char==="all"
+    ? [...d3.rollup(scopedLines.filter(d=>CORE_CHARS.includes(d.speaker)),v=>v.length,d=>d.speaker).entries()]
+        .sort((a,b)=>b[1]-a[1]).slice(0,10).map(d=>d[0])
+    : [S.char].filter(ch=>CORE_CHARS.includes(ch));
+
   if(!chars.length){ct.innerHTML='<div class="no-data">No data</div>';return;}
   const cntMap={};
-  const sourceLines=S.char==="all" ? S.lines : S.lines.filter(d=>d.speaker===S.char);
+  const sourceLines=S.char==="all" ? scopedLines : scopedLines.filter(d=>d.speaker===S.char);
   sourceLines.forEach(d=>{
     if(!chars.includes(d.speaker)||!episodes.includes(d.ep))return;
     const k=d.speaker+"|||"+d.ep;cntMap[k]=(cntMap[k]||0)+1;
@@ -207,13 +218,34 @@ function renderHeatmap(){
 // Pre-compute per-episode edge/node data so play just reveals them (CURSOR REWORKED MY ORIGINAL CODE BECAUSE MY ORIGINAL CODE GAVE ME MOTION SICKNESS BECAUSE OF THE JUMPY MOVEMENTS)
 function buildFullNetData(){
   const emoMap=new Map(S.scenes.map(s=>[s.sid,s.emo]));
+  const emoScoreMap=new Map(S.scenes.map(s=>[s.sid,s.scores||{}]));
+  const emoKeys=Object.keys(EMO_COL).filter(e=>e!=="unknown");
+
+  function normalizedSceneEmotionScores(sid){
+    const src=emoScoreMap.get(sid)||{};
+    const out={};
+    let sum=0;
+    emoKeys.forEach(k=>{
+      const v=Math.max(0,+src[k]||0);
+      out[k]=v;
+      sum+=v;
+    });
+    if(sum>0){
+      emoKeys.forEach(k=>{out[k]/=sum;});
+      return out;
+    }
+    const fallback=emoMap.get(sid)||"unknown";
+    emoKeys.forEach(k=>{out[k]=0;});
+    if(emoKeys.includes(fallback)) out[fallback]=1;
+    return out;
+  }
   let lines=S.lines;
   if(S.season!=="all") lines=lines.filter(d=>d.season===+S.season);
 
   // Per-episode: which characters appear & which edges form
   const nodeFirstEp={};   // char -> earliest episode index (0-based)
   const edgeFirstEp={};   // "A|||B" -> earliest episode index
-  const edgeEmo={};       // "A|||B" -> {emo: count}
+  const edgeEmo={};       // "A|||B" -> {emo: score_sum}
   const edgeCounts={};    // "A|||B" -> total count
   const charLines={};     // char -> total lines
 
@@ -230,13 +262,21 @@ function buildFullNetData(){
 
     byScene.forEach(sl=>{
       const sp=[...new Set(sl.map(d=>d.speaker))].filter(s=>CORE_CHARS.includes(s));
-      const em=emoMap.get(sl[0].sid)||"unknown";
+      const sid=sl[0].sid;
+      const em=emoMap.get(sid)||"unknown";
+      const sceneScores=normalizedSceneEmotionScores(sid);
       for(let i=0;i<sp.length;i++) for(let j=i+1;j<sp.length;j++){
         const[a,b]=sp[i]<sp[j]?[sp[i],sp[j]]:[sp[j],sp[i]];
         const k=a+"|||"+b;
         edgeCounts[k]=(edgeCounts[k]||0)+1;
         if(!edgeEmo[k]) edgeEmo[k]={};
-        edgeEmo[k][em]=(edgeEmo[k][em]||0)+1;
+        emoKeys.forEach(label=>{
+          edgeEmo[k][label]=(edgeEmo[k][label]||0)+sceneScores[label];
+        });
+        // Keep fallback dominant count only if parsed scores are missing/empty.
+        if(!Object.values(sceneScores).some(v=>v>0)){
+          edgeEmo[k][em]=(edgeEmo[k][em]||0)+1;
+        }
         if(edgeFirstEp[k]===undefined) edgeFirstEp[k]=epI;
       }
     });
@@ -254,6 +294,7 @@ function buildFullNetData(){
     .map(([k,cnt])=>{
       const[a,b]=k.split("|||");
       const ec=edgeEmo[k]||{};
+      // Pick dominant blended emotion for the relationship across all shared scenes.
       const em=Object.keys(ec).length?Object.entries(ec).sort((x,y)=>y[1]-x[1])[0][0]:"unknown";
       return{source:a,target:b,count:cnt,emotion:em,firstEp:edgeFirstEp[k]||0};
     })
@@ -599,6 +640,15 @@ function idScore(ep){
   const tot=law+vig;return tot===0?.5:law/tot;
 }
 
+function getSeasonEpisodesFromData(sn){
+  return [...new Set(
+    S.lines
+      .filter(d=>d.season===sn)
+      .map(d=>d.ep)
+      .filter(Boolean)
+  )].sort((a,b)=>a.localeCompare(b));
+}
+
 function renderIdentity(){
   const ct=document.getElementById("identity-timeline");ct.innerHTML="";
 
@@ -618,7 +668,8 @@ function renderIdentity(){
   let avgScores={};
 
   seasons.forEach((sn,ri)=>{
-    const eps=ALL_EPS.filter(e=>e.startsWith(`S0${sn}`));
+    const eps=getSeasonEpisodesFromData(sn);
+    if(!eps.length) return;
     const scores=eps.map(ep=>({ep,score:idScore(ep)}));
     const bW=w/scores.length;
     const yOff=topPad+ri*(rowH+gap);
@@ -753,6 +804,34 @@ function renderThemes(){
 function renderEmotion(){
   const ct=document.getElementById("emotion-timeline");ct.innerHTML="";
   const scenes=fScenes();if(!scenes.length)return;
+  const emoKeys=Object.keys(EMO_COL).filter(e=>e!=="unknown");
+
+  function normalizeScores(sc){
+    const base={};
+    emoKeys.forEach(k=>{base[k]=0;});
+    const src=sc&&typeof sc==="object" ? sc : {};
+    let sum=0;
+    emoKeys.forEach(k=>{
+      const v=Math.max(0,+src[k]||0);
+      base[k]=v;
+      sum+=v;
+    });
+    return{scores:base,sum};
+  }
+
+  function sceneScores(sc){
+    const normalized=normalizeScores(sc.scores);
+    if(normalized.sum>0){
+      const out={};
+      emoKeys.forEach(k=>{out[k]=normalized.scores[k]/normalized.sum;});
+      return out;
+    }
+    const out={};
+    emoKeys.forEach(k=>{out[k]=0;});
+    if(emoKeys.includes(sc.emo)) out[sc.emo]=1;
+    return out;
+  }
+
   const seasons=S.season==="all" ? [1,2,3] : [+S.season];
   const scenesBySeason=seasons.map(sn=>({
     season:sn,
@@ -760,19 +839,45 @@ function renderEmotion(){
   })).filter(d=>d.scenes.length);
   if(!scenesBySeason.length) return;
 
+  const mixTotals={};
+  emoKeys.forEach(k=>{mixTotals[k]=0;});
+  scenes.forEach(sc=>{
+    const ss=sceneScores(sc);
+    emoKeys.forEach(k=>{mixTotals[k]+=ss[k];});
+  });
+  const mixSum=d3.sum(emoKeys,k=>mixTotals[k])||1;
+  const mixParts=emoKeys.map(k=>({emotion:k,value:mixTotals[k]/mixSum})).filter(d=>d.value>0);
+
   const W=ct.clientWidth||500;
-  const m={top:16,right:12,bottom:20,left:52},w=W-m.left-m.right;
+  const m={top:30,right:12,bottom:20,left:52},w=W-m.left-m.right;
   const stripH=42,rowGap=30,tickGap=18;
   const legendRows=Math.ceil(Object.keys(EMO_COL).length/4);
   const legendH=legendRows*16;
+  const mixBarH=14,mixGap=12;
   const rowBlockH=stripH+tickGap+rowGap;
   const rowsH=scenesBySeason.length*rowBlockH-rowGap;
-  const H=m.top+rowsH+32+legendH+m.bottom;
+  const H=m.top+mixBarH+mixGap+rowsH+32+legendH+m.bottom;
   const svg=d3.select(ct).append("svg").attr("width",W).attr("height",H);
   const g=svg.append("g").attr("transform",`translate(${m.left},${m.top})`);
 
+  // Overall composition across current filters: shows the emotional mix directly.
+  g.append("text").attr("x",0).attr("y",-8).attr("fill","#555").attr("font-size","9px").attr("font-weight","600")
+    .text("Overall Emotion Mix");
+  let x0=0;
+  mixParts.forEach(p=>{
+    const segW=Math.max(0,p.value*w);
+    if(segW<=0) return;
+    g.append("rect").attr("x",x0).attr("y",0).attr("width",segW).attr("height",mixBarH)
+      .attr("fill",EMO_COL[p.emotion]||"#333").attr("opacity",0.9).attr("stroke","#111").attr("stroke-width",0.3)
+      .on("mousemove",ev=>showTT(ev,`<div class="tt-name">${p.emotion}</div><div class="tt-row">Share: <span>${(p.value*100).toFixed(1)}%</span></div>`))
+      .on("mouseleave",hideTT);
+    x0+=segW;
+  });
+  g.append("rect").attr("x",0).attr("y",0).attr("width",w).attr("height",mixBarH)
+    .attr("fill","none").attr("stroke","#222").attr("stroke-width",0.5);
+
   scenesBySeason.forEach((row,ri)=>{
-    const rowY=ri*rowBlockH;
+    const rowY=mixBarH+mixGap+(ri*rowBlockH);
     const rowScenes=row.scenes;
     const cellW=Math.max(2.5,w/rowScenes.length);
 
@@ -785,10 +890,15 @@ function renderEmotion(){
       g.append("rect").attr("class","emo-strip").attr("x",i*cellW).attr("y",rowY)
         .attr("width",cellW).attr("height",stripH).attr("fill",col).attr("opacity",.75)
         .attr("stroke","#111").attr("stroke-width",Math.min(0.4,cellW*0.15))
-        .on("mousemove",ev=>showTT(ev,`<div class="tt-name">${sc.ep}</div>
+        .on("mousemove",ev=>{
+          const ss=sceneScores(sc);
+          const top3=emoKeys.map(k=>({k,v:ss[k]})).sort((a,b)=>b.v-a.v).slice(0,3)
+            .map(d=>`<div class="tt-row">${d.k}: <span>${(d.v*100).toFixed(1)}%</span></div>`).join("");
+          showTT(ev,`<div class="tt-name">${sc.ep}</div>
           <div class="tt-row">Scene: <span>${sc.sid.split("_").pop()}</span></div>
           <div class="tt-row">Emotion: <span style="color:${col}">${sc.emo}</span></div>
-          <div class="tt-row">Location: <span>${sc.loc}</span></div>`))
+          <div class="tt-row">Location: <span>${sc.loc}</span></div>${top3}`);
+        })
         .on("mouseleave",hideTT);
     });
 
@@ -805,7 +915,7 @@ function renderEmotion(){
 
   // Legend
   const emos=Object.keys(EMO_COL);
-  const lg=svg.append("g").attr("transform",`translate(${m.left},${m.top+rowsH+32})`);
+  const lg=svg.append("g").attr("transform",`translate(${m.left},${m.top+mixBarH+mixGap+rowsH+32})`);
   emos.forEach((em,i)=>{
     const lx=(i%4)*(w/4),ly=Math.floor(i/4)*16;
     lg.append("rect").attr("x",lx).attr("y",ly).attr("width",8).attr("height",8).attr("fill",EMO_COL[em]).attr("rx",2);
