@@ -1,8 +1,11 @@
 # Daredevil Character Intelligence Dashboard
+
 ## Motivation
+
 The motivation behind this application is to analyse the characters from one of my favourite shows Daredevil and see data points in much more visual way. 
 One of the most important questions, is how are the character related with each other. 
----
+
+
 ## Data
 
 ### Data source
@@ -76,7 +79,7 @@ The interface is structured as a single-page, multi-section dashboard. Core cont
 ### Design sketches
 
 
- - <img src = "images/C3931C6A-5329-4F02-A353-6AEE7B2921AF.png">
+ - ![Design sketch](../images/C3931C6A-5329-4F02-A353-6AEE7B2921AF.png)
 PS: My handwriting is terrrible which is why I prefer typing but my sketches was mainly for the heatmap because I wanted to use one but I was trying to think how I could use one 
 
 ### Design justifications
@@ -93,7 +96,7 @@ This dashboard enabled several concrete findings from transcript-derived evidenc
 2. **Relationship evolution:** Network playback highlights when key character ties emerge and intensify.
 3. **Emotional Thene:** It shows the emotional theme breakdown scene by scene for every episode 
 
-images/image.png 
+![Emotion theme finding screenshot](../images/image.png)
 
 
 
