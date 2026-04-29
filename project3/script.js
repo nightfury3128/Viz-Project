@@ -1034,7 +1034,7 @@ function renderEmotion(){
 }
 
 
-const LOCS=[ // Would have loved to have more locations and not hardcode it but I had to hardcode a lot of it
+const LOCS=[ // Would have loved to have more locations and not hardcode it but I had to hardcode it because I was running out of time 
   {name:"Nelson & Murdock Office",lat:40.7614,lng:-74.0023,desc:"The law office at the heart of Hell's Kitchen",kw:["kitchen","nelson","murdock","office"],color:"#ff2a2a",icon:"⚖️"},
   {name:"Sacred Saints Church",lat:40.759,lng:-73.997,desc:"Matt's confessional sanctuary",kw:["church","confessional","chapel","lantom"],color:"#f39c12",icon:"✝️"},
   {name:"The Docks",lat:40.7282,lng:-74.017,desc:"Criminal trafficking operations",kw:["dock","pier","warehouse","shipping"],color:"#8b0000",icon:"⚓"},
