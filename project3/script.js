@@ -1,4 +1,4 @@
-import * as CONST from "../project3/const.js";
+import * as CONST from "./const.js";
 const {DATA_PATH, NAME_MAP, CORE_CHARS, CHAR_COL, IGNORE_WORDS, SEASON_EPS, ALL_EPS, EMO_COL, THEMES_FULL, THEME_COL, THEME_KW, LAWYER_W, VIGIL_W, STOP, S, TT} = CONST;
 
 // Loading overlay
