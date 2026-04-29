@@ -131,12 +131,12 @@ Open:
 
 - `http://localhost:8000`
 
----
 
 ## Demo Video (2-3 Minutes)
 
 **Video link:** `<Add YouTube or webpage-hosted video URL>`
 
 
----
 
+## AI USAGE 
+The overall AI usage was a little less than my normal coding session mainly because I love DAREDEVIL, but I used Claude A LOT for data clean up and cursor to help me with code for data processing since there a lot of emotions that I was missing. I used Chatgpt to make the ignore wordlist for the wordcloud. Cursor was also used for the Relationship Netowrk and randomly throughout the code for debugging and understand the error, one of the major error I was getting was with the heatmap because filters were not being applied properly. Cursor also helped me decide colors other than the daredevil color. 
