@@ -132,10 +132,9 @@ Open:
 - `http://localhost:8000`
 
 
-## Demo Video (2-3 Minutes)
+## Demo Video
 
-**Video link:** `<Add YouTube or webpage-hosted video URL>`
-
+**Video link:** https://youtu.be/PIrJSvehEW8
 
 
 ## AI USAGE 
