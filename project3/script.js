@@ -124,7 +124,7 @@ function setMode(m){
 }
 function renderAll(){
   renderBar();renderHeatmap();renderNetwork();
-  renderWordCloud();renderWordFreq();renderWordTrend();
+  renderWordCloud();renderPhraseFreq();renderWordTrend();
   renderIdentity();renderThemes();renderEmotion();
 }
 
@@ -167,12 +167,33 @@ function renderBar(){
 
 function renderHeatmap(){
   const ct=document.getElementById("heatmap-chart");ct.innerHTML="";
+  const statsEl=document.getElementById("heatmap-character-stats");
   const episodes=getEpsForSeason();
   let scopedLines=S.lines;
   if(S.season!=="all") scopedLines=scopedLines.filter(d=>d.season===+S.season);
   if(S.epIdx>0){
     const e=getEpCode(S.epIdx);
     scopedLines=scopedLines.filter(d=>d.ep===e);
+  }
+
+  if(statsEl){
+    if(S.char!=="all"){
+      const chLines=scopedLines.filter(d=>d.speaker===S.char);
+      const epCount=new Set(chLines.map(d=>d.ep)).size;
+      const lineCount=chLines.length;
+      const scopeLabel=S.epIdx>0?"Current Episode":"Current Selection";
+      statsEl.innerHTML=`<span class="hs-label">${S.char}</span>
+        <span class="hs-dot"></span>
+        <span class="hs-item">Episodes Appeared: <strong>${epCount}</strong></span>
+        <span class="hs-dot"></span>
+        <span class="hs-item">Total Lines: <strong>${lineCount}</strong></span>
+        <span class="hs-dot"></span>
+        <span class="hs-scope">${scopeLabel}</span>`;
+      statsEl.classList.add("show");
+    }else{
+      statsEl.innerHTML="";
+      statsEl.classList.remove("show");
+    }
   }
 
   const chars=S.char==="all"
@@ -512,8 +533,18 @@ function stopPlay(){
   if(S.netLinks) S.netLinks.classed("highlight-pulse",false);
 }
 
-function getWords(ch,topN=60){
-  let lines=ch&&ch!=="all"?S.lines.filter(d=>d.speaker===ch):fLines();
+function scopedTextLines({character="all",includeEpisode=true}={}){
+  let lines=S.lines;
+  if(S.season!=="all") lines=lines.filter(d=>d.season===+S.season);
+  if(includeEpisode&&S.epIdx>0){
+    const ep=getEpCode(S.epIdx);
+    lines=lines.filter(d=>d.ep===ep);
+  }
+  if(character&&character!=="all") lines=lines.filter(d=>d.speaker===character);
+  return lines;
+}
+
+function getWordsFromLines(lines,topN=60){
   const freq={};
   lines.forEach(d=>{
     d.line.toLowerCase().replace(/[^a-z\s']/g," ").split(/\s+/).forEach(w=>{
@@ -535,9 +566,14 @@ function getWords(ch,topN=60){
   return Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,topN).map(([w,c])=>({word:w,count:c}));
 }
 
+function getWords(ch,topN=60,opts={}){
+  const lines=scopedTextLines({character:ch,includeEpisode:opts.includeEpisode!==false});
+  return getWordsFromLines(lines,topN);
+}
+
 function renderWordCloud(){
   const ct=document.getElementById("wordcloud-area");ct.innerHTML="";
-  const ch=S.char!=="all"?S.char:"Matt Murdock";
+  const ch=S.char;
   const words=getWords(ch,50);if(!words.length)return;
   const W=ct.clientWidth||340,H=260;
   const svg=d3.select(ct).append("svg").attr("width",W).attr("height",H);
@@ -566,7 +602,7 @@ function renderWordCloud(){
 // FREQUENCY 
 function renderWordFreq(){
   const ct=document.getElementById("wordfreq-chart");ct.innerHTML="";
-  const ch=S.char!=="all"?S.char:"Matt Murdock";
+  const ch=S.char;
   const words=getWords(ch,12);if(!words.length)return;
   const W=ct.clientWidth||340,H=260;
   const m={top:12,right:16,bottom:12,left:80},w=W-m.left-m.right,h=H-m.top-m.bottom;
@@ -590,7 +626,16 @@ function renderWordFreq(){
 function renderWordTrend(){
   const ct=document.getElementById("wordtrend-chart");ct.innerHTML="";
   const kwCt=document.getElementById("word-trend-keywords");kwCt.innerHTML="";
-  const allKW=["justice","violence","fear","god","devil","kill","save","blind","truth"];
+  const trendBase=scopedTextLines({character:S.char,includeEpisode:false});
+  const allKW=getWordsFromLines(trendBase,14).map(d=>d.word);
+  if(!allKW.length){
+    document.getElementById("wordtrend-chart").innerHTML='<div class="no-data">No trend data</div>';
+    return;
+  }
+  S.trendWords=new Set([...S.trendWords].filter(w=>allKW.includes(w)));
+  if(!S.trendWords.size){
+    allKW.slice(0,Math.min(4,allKW.length)).forEach(w=>S.trendWords.add(w));
+  }
   allKW.forEach((w,i)=>{
     const c=document.createElement("span");
     c.className="kw-chip"+(S.trendWords.has(w)?" active":"");
@@ -600,8 +645,10 @@ function renderWordTrend(){
     kwCt.appendChild(c);
   });
   const active=allKW.filter(w=>S.trendWords.has(w));if(!active.length)return;
-  const epData=ALL_EPS.map(ep=>{
-    const ls=S.lines.filter(d=>d.ep===ep);
+  const eps=getEpsForSeason();
+  const epData=eps.map(ep=>{
+    let ls=S.lines.filter(d=>d.ep===ep);
+    if(S.char!=="all") ls=ls.filter(d=>d.speaker===S.char);
     const tot=ls.reduce((s,d)=>s+d.line.split(/\s+/).length,0)||1;
     const n={ep};active.forEach(w=>{let c=0;ls.forEach(d=>{c+=d.line.toLowerCase().split(/\s+/).filter(t=>t.includes(w)).length;});n[w]=(c/tot)*1000;});
     return n;
@@ -610,23 +657,86 @@ function renderWordTrend(){
   const m={top:8,right:12,bottom:32,left:34},w=W-m.left-m.right,h=H-m.top-m.bottom;
   const svg=d3.select(ct).append("svg").attr("width",W).attr("height",H);
   const g=svg.append("g").attr("transform",`translate(${m.left},${m.top})`);
-  const x=d3.scalePoint().domain(ALL_EPS).range([0,w]);
+  const x=d3.scalePoint().domain(eps).range([0,w]);
   const maxY=d3.max(epData.flatMap(d=>active.map(k=>d[k])))||1;
   const y=d3.scaleLinear().domain([0,maxY]).nice().range([h,0]);
 
   g.append("g").attr("class","axis").attr("transform",`translate(0,${h})`)
-    .call(d3.axisBottom(x).tickValues(["S01E01","S02E01","S03E01"]).tickFormat(d=>d==="S01E01"?"S1":d==="S02E01"?"S2":"S3"));
+    .call(d3.axisBottom(x).tickValues(eps.filter((_,i)=>i===0||i===Math.floor((eps.length-1)/2)||i===eps.length-1)))
+    .selectAll("text").style("font-size","8px");
   g.append("g").attr("class","axis").call(d3.axisLeft(y).ticks(3));
 
-  ["S02E01","S03E01"].forEach(ep=>{
-    g.append("line").attr("x1",x(ep)).attr("x2",x(ep)).attr("y1",0).attr("y2",h).attr("stroke","#222").attr("stroke-dasharray","3,3");
-  });
+  if(S.season==="all"){
+    ["S02E01","S03E01"].forEach(ep=>{
+      g.append("line").attr("x1",x(ep)).attr("x2",x(ep)).attr("y1",0).attr("y2",h).attr("stroke","#222").attr("stroke-dasharray","3,3");
+    });
+  }
 
   active.forEach((kw,i)=>{
     const ln=d3.line().x(d=>x(d.ep)).y(d=>y(d[kw])).curve(d3.curveMonotoneX);
     g.append("path").datum(epData).attr("class","trend-line")
       .attr("stroke",d3.schemeTableau10[allKW.indexOf(kw)%10]).attr("d",ln);
   });
+}
+
+function getFrequentPhrases(character="all",topN=12){
+  const lines=scopedTextLines({character,includeEpisode:true});
+  const freq={};
+  lines.forEach(d=>{
+    const toks=d.line.toLowerCase()
+      .replace(/[^a-z\s']/g," ")
+      .split(/\s+/)
+      .map(t=>t.replace(/^'+|'+$/g,"").replace(/'/g,""))
+      .filter(t=>t&&t.length>2&&!STOP.has(t)&&!IGNORE_WORDS.has(t));
+    for(let i=0;i<toks.length-1;i++){
+      const bi=toks[i]+" "+toks[i+1];
+      freq[bi]=(freq[bi]||0)+1;
+      if(i<toks.length-2){
+        const tri=bi+" "+toks[i+2];
+        freq[tri]=(freq[tri]||0)+1;
+      }
+    }
+  });
+  return Object.entries(freq)
+    .filter(([,c])=>c>=2)
+    .sort((a,b)=>b[1]-a[1])
+    .slice(0,topN)
+    .map(([phrase,count])=>({phrase,count}));
+}
+
+function renderPhraseFreq(){
+  const ct=document.getElementById("phrase-chart");
+  if(!ct) return;
+  ct.innerHTML="";
+  const data=getFrequentPhrases(S.char,10);
+  if(!data.length){
+    ct.innerHTML='<div class="no-data">No repeated phrases in current filter</div>';
+    return;
+  }
+  const W=ct.clientWidth||700;
+  const H=Math.max(260,(ct.clientHeight||300)-6);
+  const leftPad=Math.min(190,Math.max(120,W*0.24));
+  const m={top:8,right:28,bottom:8,left:leftPad},w=W-m.left-m.right,h=H-m.top-m.bottom;
+  const svg=d3.select(ct).append("svg").attr("width",W).attr("height",H);
+  const g=svg.append("g").attr("transform",`translate(${m.left},${m.top})`);
+  const x=d3.scaleLinear().domain([0,d3.max(data,d=>d.count)||1]).nice().range([0,w]);
+  const y=d3.scaleBand().domain(data.map(d=>d.phrase)).range([0,h]).padding(.2);
+  g.append("g").attr("class","axis")
+    .call(d3.axisLeft(y).tickSize(0))
+    .selectAll("text")
+    .style("font-size","9px");
+  g.select(".domain").remove();
+  g.selectAll(".phrase-bar").data(data).join("rect")
+    .attr("class","bar-rect phrase-bar")
+    .attr("x",0).attr("y",d=>y(d.phrase)).attr("height",y.bandwidth()).attr("rx",2)
+    .attr("fill","#c0392b")
+    .attr("width",0)
+    .transition().duration(450).ease(d3.easeCubicOut)
+    .attr("width",d=>x(d.count));
+  g.selectAll(".phrase-label").data(data).join("text")
+    .attr("x",d=>x(d.count)+4).attr("y",d=>y(d.phrase)+y.bandwidth()/2+3)
+    .attr("fill","#555").attr("font-size","9px")
+    .text(d=>d.count);
 }
 
 // DENTITY TIMELINE

@@ -1,6 +1,6 @@
 
 const DATA_PATH="data/";
-
+// This is just for nomralization of the names
 const NAME_MAP={
   "matt murdock":"Matt Murdock","matt":"Matt Murdock","murdock":"Matt Murdock",
   "daredevil":"Matt Murdock","the man in black":"Matt Murdock","devil":"Matt Murdock",

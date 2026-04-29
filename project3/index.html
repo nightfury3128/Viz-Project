@@ -16,7 +16,6 @@
     <div class="hero-bg"></div>
     <div class="hero-content">
       <h1 class="hero-title">DAREDEVIL</h1>
-      <p class="hero-subtitle">Character Intelligence Dashboard</p>
     </div>
   </header>
 
@@ -53,8 +52,25 @@
   <!-- SECTION 1 — OVERVIEW -->
   <section class="viz-section fade-section" id="section-overview">
     <div class="section-head">
-      <span class="sec-num">01</span>
       <h2>Character Overview</h2>
+    </div>
+    <div class="overview-meta-grid">
+      <div class="meta-card">
+        <div class="meta-label">Run Years</div>
+        <div class="meta-value">2015-2018</div>
+      </div>
+      <div class="meta-card">
+        <div class="meta-label">Platform</div>
+        <div class="meta-value">Netflix</div>
+      </div>
+      <div class="meta-card">
+        <div class="meta-label">Seasons / Episodes</div>
+        <div class="meta-value">3 Seasons / 35 Episodes</div>
+      </div>
+      <div class="meta-card">
+        <div class="meta-label">Genre</div>
+        <div class="meta-value">Superhero Crime Drama</div>
+      </div>
     </div>
     <div class="grid-2">
       <div class="card">
@@ -63,6 +79,7 @@
       </div>
       <div class="card">
         <div class="card-top"><h3>Episode Heatmap</h3><p>Lines per character per episode</p></div>
+        <div id="heatmap-character-stats" class="heatmap-stats" aria-live="polite"></div>
         <div class="chart-area" id="heatmap-chart"></div>
       </div>
     </div>
@@ -71,7 +88,6 @@
   <!-- SECTION 2 — NETWORK -->
   <section class="viz-section fade-section" id="section-network">
     <div class="section-head">
-      <span class="sec-num">02</span>
       <h2>Relationship Network</h2>
     </div>
     <div class="net-controls">
@@ -94,7 +110,6 @@
   <!-- SECTION 3 — LANGUAGE -->
   <section class="viz-section fade-section" id="section-language">
     <div class="section-head">
-      <span class="sec-num">03</span>
       <h2>Language &amp; Dialogue</h2>
     </div>
     <div class="grid-3">
@@ -103,8 +118,8 @@
         <div class="chart-area" id="wordcloud-area"></div>
       </div>
       <div class="card">
-        <div class="card-top"><h3>Top Words</h3><p>Frequency ranking</p></div>
-        <div class="chart-area" id="wordfreq-chart"></div>
+        <div class="card-top"><h3>Frequent Phrases</h3><p>Repeated 2-3 word phrases in current filter</p></div>
+        <div class="chart-area" id="phrase-chart"></div>
       </div>
       <div class="card">
         <div class="card-top"><h3>Word Trend</h3><p>Usage across episodes</p></div>
@@ -117,7 +132,6 @@
   <!-- SECTION 4 — INSIGHTS -->
   <section class="viz-section fade-section" id="section-insights">
     <div class="section-head">
-      <span class="sec-num">04</span>
       <h2>Identity &amp; Themes</h2>
     </div>
 
@@ -155,7 +169,6 @@
   <!-- SECTION 5 — MAP -->
   <section class="viz-section fade-section" id="section-map">
     <div class="section-head">
-      <span class="sec-num">05</span>
       <h2>Hell's Kitchen</h2>
     </div>
     <div class="map-grid">
