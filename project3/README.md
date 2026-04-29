@@ -76,7 +76,7 @@ The interface is structured as a single-page, multi-section dashboard. Core cont
 ### Design sketches
 
 
- - images/C3931C6A-5329-4F02-A353-6AEE7B2921AF.png 
+ - <img src = "images/C3931C6A-5329-4F02-A353-6AEE7B2921AF.png">
 PS: My handwriting is terrrible which is why I prefer typing but my sketches was mainly for the heatmap because I wanted to use one but I was trying to think how I could use one 
 
 ### Design justifications
